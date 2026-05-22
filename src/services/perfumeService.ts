@@ -80,4 +80,13 @@ export const perfumeService = {
 
     if (error) throw error;
   },
+
+  async setActive(id: number, active: boolean): Promise<void> {
+    const { error } = await supabase
+      .from('perfumes')
+      .update({ active })
+      .eq('id', id);
+
+    if (error) throw error;
+  },
 };

@@ -1,21 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Input } from '../../../ui/Input';
 import { Chip } from '../../../ui/Chip';
 import { useFilterStore } from '../../../../store/filterStore';
 import { useDebounce } from '../../../../hooks/useDebounce';
-import { perfumes } from '../../../../data/perfumes';
+import type { Perfume } from '../../../../types/perfume';
 import styles from './FilterBar.module.css';
 
 const unique = (arr: string[]) => [...new Set(arr)].sort((a, b) => a.localeCompare(b, 'es'));
-const brandOptions = ['Todas', ...unique(perfumes.map((p) => p.brand))];
+
 const statusOptions = ['Todos', 'Disponible', 'Última unidad', 'Sin stock'];
 const genderOptions = ['Todos', 'Hombre', 'Mujer', 'Unisex', 'Para empezar'];
-const familyOptions = [
-  'Todas', 'Más pedidos', 'Dulce', 'Gourmand', 'Fresco', 'Frutal', 'Floral',
-  'Intenso', 'Acuático', 'Elegante', 'Oud', 'Versátil',
-];
-const useOptions = ['Todos', 'Día', 'Noche', 'Verano', 'Invierno', 'Oficina', 'Salida', 'Regalo'];
 
 interface DropdownProps {
   label: string;
@@ -39,7 +34,6 @@ function Dropdown({ label, current, options, value, onChange }: DropdownProps) {
 
   useEffect(() => {
     if (!open) return;
-    // Delay scroll listener to avoid layout-shift scroll (mobile relative panel) closing it immediately
     let scrollHandler: (() => void) | null = null;
     const t = setTimeout(() => {
       scrollHandler = () => setOpen(false);
@@ -101,7 +95,11 @@ function Dropdown({ label, current, options, value, onChange }: DropdownProps) {
   );
 }
 
-export function FilterBar() {
+interface FilterBarProps {
+  perfumes: Perfume[];
+}
+
+export function FilterBar({ perfumes }: FilterBarProps) {
   const store = useFilterStore();
   const [localSearch, setLocalSearch] = useState(store.search);
   const debouncedSearch = useDebounce(localSearch, 300);
@@ -109,6 +107,23 @@ export function FilterBar() {
   useEffect(() => {
     store.setSearch(debouncedSearch);
   }, [debouncedSearch]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const brandOptions = useMemo(
+    () => ['Todas', ...unique(perfumes.map((p) => p.brand))],
+    [perfumes]
+  );
+
+  const familyOptions = useMemo(() => {
+    const all = unique(perfumes.flatMap((p) => p.family));
+    const pinned = ['Más pedidos'].filter((v) => all.includes(v));
+    const rest = all.filter((v) => !pinned.includes(v));
+    return ['Todas', ...pinned, ...rest];
+  }, [perfumes]);
+
+  const useOptions = useMemo(
+    () => ['Todos', ...unique(perfumes.flatMap((p) => p.use))],
+    [perfumes]
+  );
 
   return (
     <section className={styles.bar} aria-label="Filtros del catálogo">

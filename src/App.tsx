@@ -1,16 +1,20 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { CartDrawer } from './components/features/cart/CartDrawer';
+import { AdminRoute } from './components/features/admin/AdminRoute';
 import { Home } from './pages/Home';
 import { useStoreConfig } from './hooks/useStoreConfig';
 
 const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })));
 const Dashboard = lazy(() =>
   import('./pages/admin/Dashboard').then((m) => ({ default: m.Dashboard }))
+);
+const Login = lazy(() =>
+  import('./pages/admin/Login').then((m) => ({ default: m.Login }))
 );
 
 const queryClient = new QueryClient();
@@ -57,28 +61,65 @@ function FloatingWhatsApp() {
   );
 }
 
+function PublicLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <Navbar />
+      {children}
+      <Footer />
+      <CartDrawer />
+      <FloatingWhatsApp />
+    </>
+  );
+}
+
 function AppRoutes() {
   const location = useLocation();
+
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<Home />} />
+        {/* Rutas públicas */}
+        <Route
+          path="/"
+          element={
+            <PublicLayout>
+              <Home />
+            </PublicLayout>
+          }
+        />
         <Route
           path="/about"
           element={
+            <PublicLayout>
+              <Suspense fallback={null}>
+                <About />
+              </Suspense>
+            </PublicLayout>
+          }
+        />
+
+        {/* Rutas admin — sin navbar/footer público */}
+        <Route
+          path="/admin/login"
+          element={
             <Suspense fallback={null}>
-              <About />
+              <Login />
             </Suspense>
           }
         />
         <Route
           path="/admin/*"
           element={
-            <Suspense fallback={null}>
-              <Dashboard />
-            </Suspense>
+            <AdminRoute>
+              <Suspense fallback={null}>
+                <Dashboard />
+              </Suspense>
+            </AdminRoute>
           }
         />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AnimatePresence>
   );
@@ -88,11 +129,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Navbar />
         <AppRoutes />
-        <Footer />
-        <CartDrawer />
-        <FloatingWhatsApp />
       </BrowserRouter>
     </QueryClientProvider>
   );
