@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { Input } from '../../../ui/Input';
 import { Chip } from '../../../ui/Chip';
@@ -79,35 +78,25 @@ function Dropdown({ label, current, options, value, onChange }: DropdownProps) {
           aria-hidden="true"
         />
       </button>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className={styles.panel}
-            role="listbox"
-            aria-label={label}
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.16 }}
-          >
-            <div className={styles.chips}>
-              {options.map((opt) => (
-                <Chip
-                  key={opt}
-                  variant="filter"
-                  active={value === opt}
-                  onClick={() => {
-                    onChange(opt);
-                    setOpen(false);
-                  }}
-                >
-                  {opt}
-                </Chip>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {open && (
+        <div className={styles.panel} role="listbox" aria-label={label}>
+          <div className={styles.chips}>
+            {options.map((opt) => (
+              <Chip
+                key={opt}
+                variant="filter"
+                active={value === opt}
+                onClick={() => {
+                  onChange(opt);
+                  setOpen(false);
+                }}
+              >
+                {opt}
+              </Chip>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

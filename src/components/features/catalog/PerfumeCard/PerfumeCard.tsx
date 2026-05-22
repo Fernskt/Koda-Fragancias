@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { ShoppingBag, MessageCircle } from 'lucide-react';
 import { Chip } from '../../../ui/Chip';
 import { useCart } from '../../../../hooks/useCart';
@@ -38,13 +37,9 @@ export function PerfumeCard({ perfume, onImageClick, index }: Props) {
   };
 
   return (
-    <motion.article
+    <article
       className={[styles.card, isOut ? styles.outOfStock : ''].filter(Boolean).join(' ')}
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: Math.min(index * 0.04, 0.5), ease: [0.4, 0, 0.2, 1] }}
-      whileHover={{ y: -3 }}
-      layout
+      style={{ animationDelay: `${Math.min(index * 0.04, 0.5)}s` }}
     >
       <div className={styles.media}>
         <StatusPill status={perfume.status} />
@@ -129,6 +124,6 @@ export function PerfumeCard({ perfume, onImageClick, index }: Props) {
           )}
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }
