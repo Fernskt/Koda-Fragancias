@@ -39,6 +39,12 @@ html {
   }
 }
 
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
+}
+
 body {
   margin: 0;
   background: linear-gradient(168deg, #261835 0%, #15101e 38%, var(--bg-deep) 72%),
