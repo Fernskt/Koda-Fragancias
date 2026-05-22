@@ -4,7 +4,8 @@
       "Bash(Copy-Item \"src\\\\assets\\\\og-koda.png\" \"public\\\\og-koda.png\")",
       "Bash(Copy-Item \"src\\\\assets\\\\apple-touch-icon.png\" \"public\\\\apple-touch-icon.png\")",
       "Bash(Copy-Item \"src\\\\assets\\\\favicon.ico\" \"public\\\\favicon.ico\")",
-      "Bash(Copy-Item \"src\\\\assets\\\\koda-favicon-final.png\" \"public\\\\favicon-192.png\")"
+      "Bash(Copy-Item \"src\\\\assets\\\\koda-favicon-final.png\" \"public\\\\favicon-192.png\")",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
