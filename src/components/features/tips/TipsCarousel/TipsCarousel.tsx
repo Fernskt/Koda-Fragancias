@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { KODA_TIPS } from '../../../../data/perfumes';
+import { useTips } from '../../../../hooks/useTips';
 import styles from './TipsCarousel.module.css';
 
 function shuffle<T>(arr: T[]): T[] {
@@ -15,16 +15,25 @@ function shuffle<T>(arr: T[]): T[] {
 const INTERVAL = 6500;
 
 export function TipsCarousel() {
-  const order = useMemo(() => shuffle(KODA_TIPS), []);
+  const { data: tips = [] } = useTips();
+  const order = useMemo(() => shuffle(tips), [tips]);
   const [idx, setIdx] = useState(0);
   const orderRef = useRef(order);
 
   useEffect(() => {
+    orderRef.current = order;
+    setIdx(0);
+  }, [order]);
+
+  useEffect(() => {
+    if (order.length === 0) return;
     const timer = setInterval(() => {
       setIdx((prev) => (prev + 1) % orderRef.current.length);
     }, INTERVAL);
     return () => clearInterval(timer);
-  }, []);
+  }, [order.length]);
+
+  if (order.length === 0) return null;
 
   return (
     <div className={styles.card} aria-live="polite" aria-atomic="true">

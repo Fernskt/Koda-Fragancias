@@ -1,0 +1,25 @@
+import { supabase } from '../lib/supabase';
+
+export const authService = {
+  async login(email: string, password: string) {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    return data;
+  },
+
+  async logout() {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+  },
+
+  async getSession() {
+    const { data } = await supabase.auth.getSession();
+    return data.session;
+  },
+
+  onAuthStateChange(callback: (isAuthenticated: boolean) => void) {
+    return supabase.auth.onAuthStateChange((_event, session) => {
+      callback(!!session);
+    });
+  },
+};

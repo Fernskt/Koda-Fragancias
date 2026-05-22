@@ -1,6 +1,7 @@
 import { motion, type Variants } from 'framer-motion';
 import { TipsCarousel } from '../../tips/TipsCarousel';
-import { perfumes } from '../../../../data/perfumes';
+import { usePerfumes } from '../../../../hooks/usePerfumes';
+import { useStoreConfig } from '../../../../hooks/useStoreConfig';
 import styles from './Hero.module.css';
 import Logo from '../../../../assets/koda-logo.png';
 
@@ -13,7 +14,18 @@ const fadeUp: Variants = {
   animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] } },
 };
 
+function formatDate(iso: string): string {
+  const [y, m, d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
 export function Hero() {
+  const { data: perfumes } = usePerfumes();
+  const { data: config } = useStoreConfig();
+
+  const count = perfumes?.length ?? '—';
+  const updatedAt = config?.catalog_updated_at ? formatDate(config.catalog_updated_at) : '—';
+
   return (
     <header className={styles.hero}>
       <motion.div className={styles.inner} variants={stagger} initial="initial" animate="animate">
@@ -42,11 +54,11 @@ export function Hero() {
           <TipsCarousel />
           <div className={styles.stats}>
             <div className={styles.stat}>
-              <strong className={styles.statValue}>{perfumes.length}</strong>
+              <strong className={styles.statValue}>{count}</strong>
               <span className={styles.statLabel}>En catálogo</span>
             </div>
             <div className={styles.stat}>
-              <strong className={styles.statValue}>20/05/2026</strong>
+              <strong className={styles.statValue}>{updatedAt}</strong>
               <span className={styles.statLabel}>Actualizado</span>
             </div>
           </div>
