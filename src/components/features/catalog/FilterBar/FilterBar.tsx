@@ -34,14 +34,23 @@ function Dropdown({ label, current, options, value, onChange }: DropdownProps) {
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
-    const scrollHandler = () => setOpen(false);
     document.addEventListener('click', handler);
-    window.addEventListener('scroll', scrollHandler, { passive: true });
-    return () => {
-      document.removeEventListener('click', handler);
-      window.removeEventListener('scroll', scrollHandler);
-    };
+    return () => document.removeEventListener('click', handler);
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    // Delay scroll listener to avoid layout-shift scroll (mobile relative panel) closing it immediately
+    let scrollHandler: (() => void) | null = null;
+    const t = setTimeout(() => {
+      scrollHandler = () => setOpen(false);
+      window.addEventListener('scroll', scrollHandler, { passive: true });
+    }, 200);
+    return () => {
+      clearTimeout(t);
+      if (scrollHandler) window.removeEventListener('scroll', scrollHandler);
+    };
+  }, [open]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
