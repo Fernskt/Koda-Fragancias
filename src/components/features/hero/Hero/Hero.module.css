@@ -95,6 +95,16 @@
   line-height: 1.05;
 }
 
+@media screen and (max-width: 768px) {
+  .stat {
+    padding: 14px 12px;
+  }
+  .statValue {
+    font-size: 20px;
+  }
+  
+}
+
 .statLabel {
   display: block;
   font-size: 11px;
