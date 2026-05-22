@@ -1,0 +1,85 @@
+:root {
+  --bg: #0c0714;
+  --bg-deep: #07050c;
+  --card: #0e0b14;
+  --card2: #15101e;
+  --text: #fbf7ff;
+  --muted: #b9afc7;
+  --violet: #8b5cf6;
+  --violet2: #a855f7;
+  --lila: #d8b4fe;
+  --border: rgba(216, 180, 254, 0.24);
+  --ok: #65d69c;
+  --warn: #ffd166;
+  --error: #f87171;
+  --glass-bg: rgba(10, 6, 16, 0.58);
+  --glass-border: rgba(216, 180, 254, 0.22);
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --radius-full: 999px;
+  --shadow-card: 0 20px 58px rgba(0, 0, 0, 0.38);
+  --transition-fast: 0.16s ease;
+  --transition-base: 0.22s ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(168deg, #261835 0%, #15101e 38%, var(--bg-deep) 72%),
+    radial-gradient(ellipse 85% 55% at 12% -15%, rgba(168, 85, 247, 0.38), transparent 52%),
+    radial-gradient(ellipse 70% 45% at 100% 5%, rgba(139, 92, 246, 0.22), transparent 48%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--lila);
+  outline-offset: 3px;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}

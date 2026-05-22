@@ -1,0 +1,62 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 2, 8, 0.88);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.panel {
+  position: relative;
+  z-index: 1;
+  width: min(620px, 96vw);
+  max-height: min(92vh, 880px);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(216, 180, 254, 0.28);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(22, 14, 32, 0.97), rgba(10, 8, 14, 0.98));
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(216, 180, 254, 0.35);
+  background: rgba(0, 0, 0, 0.45);
+  color: #f3e8ff;
+  font-size: 22px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+  transition: background var(--transition-fast);
+}
+
+.closeBtn:hover {
+  background: rgba(139, 92, 246, 0.25);
+}
+
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 48px 20px 20px;
+}

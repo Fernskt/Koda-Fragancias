@@ -1,0 +1,25 @@
+.card {
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 22px;
+  padding: 14px 16px 13px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.34);
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.text {
+  font-size: 13px;
+  color: #f5f0fc;
+  line-height: 1.55;
+  min-height: 3.6em;
+}

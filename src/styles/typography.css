@@ -1,0 +1,32 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.text-lila {
+  color: var(--lila);
+}
+
+.overline {
+  color: var(--lila);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 12px;
+  font-weight: 600;
+}
