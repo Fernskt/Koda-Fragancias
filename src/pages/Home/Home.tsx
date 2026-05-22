@@ -6,15 +6,20 @@ import { usePerfumes } from '../../hooks/usePerfumes';
 import { useFilters } from '../../hooks/useFilters';
 
 export function Home() {
-  const { data = [] } = usePerfumes();
+  const { data = [], isLoading, isError, refetch } = usePerfumes();
   const filtered = useFilters(data);
 
   return (
     <PageWrapper>
       <Hero />
-      <FilterBar />
+      <FilterBar perfumes={data} />
       <main>
-        <CatalogGrid perfumes={filtered} />
+        <CatalogGrid
+          perfumes={filtered}
+          isLoading={isLoading}
+          isError={isError}
+          onRetry={refetch}
+        />
       </main>
     </PageWrapper>
   );

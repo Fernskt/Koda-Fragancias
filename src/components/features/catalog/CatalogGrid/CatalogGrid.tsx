@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { AlertCircle, RefreshCw } from 'lucide-react';
 import { PerfumeCard } from '../PerfumeCard';
 import { PerfumeModal } from '../PerfumeModal';
 import { useFilterStore } from '../../../../store/filterStore';
@@ -7,17 +8,43 @@ import styles from './CatalogGrid.module.css';
 
 const PAGE_SIZE = 6;
 
-interface Props {
-  perfumes: Perfume[];
+function CardSkeleton({ delay }: { delay: number }) {
+  return (
+    <div className={styles.skeletonCard} aria-hidden="true" style={{ animationDelay: `${delay}s` }}>
+      <div className={styles.skeletonMedia} />
+      <div className={styles.skeletonBody}>
+        <div className={styles.skeletonLine} style={{ width: '68%' }} />
+        <div className={styles.skeletonLine} style={{ width: '42%', height: 10 }} />
+        <div className={styles.skeletonLine} style={{ width: '30%', height: 20 }} />
+        <div className={styles.skeletonChips}>
+          <div className={styles.skeletonChip} />
+          <div className={styles.skeletonChip} style={{ width: 48 }} />
+          <div className={styles.skeletonChip} style={{ width: 80 }} />
+        </div>
+        <div className={styles.skeletonBlock} />
+        <div className={styles.skeletonChips}>
+          <div className={styles.skeletonChip} />
+          <div className={styles.skeletonChip} style={{ width: 52 }} />
+        </div>
+        <div className={styles.skeletonBtn} />
+      </div>
+    </div>
+  );
 }
 
-export function CatalogGrid({ perfumes }: Props) {
+interface Props {
+  perfumes: Perfume[];
+  isLoading?: boolean;
+  isError?: boolean;
+  onRetry?: () => void;
+}
+
+export function CatalogGrid({ perfumes, isLoading, isError, onRetry }: Props) {
   const [selected, setSelected] = useState<Perfume | null>(null);
   const [visible, setVisible] = useState(PAGE_SIZE);
   const reset = useFilterStore((s) => s.reset);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Reset visible count whenever the filtered list changes
   useEffect(() => {
     setVisible(PAGE_SIZE);
   }, [perfumes]);
@@ -44,17 +71,39 @@ export function CatalogGrid({ perfumes }: Props) {
 
   return (
     <section className={styles.section}>
-      <div className={styles.topline}>
-        <div>
-          <p className={styles.overline}>Resultados</p>
-          <h2 className={styles.heading}>{perfumes.length} perfumes encontrados</h2>
+      {!isLoading && !isError && (
+        <div className={styles.topline}>
+          <div>
+            <p className={styles.overline}>Resultados</p>
+            <h2 className={styles.heading}>{perfumes.length} perfumes encontrados</h2>
+          </div>
+          <button type="button" className={styles.clearBtn} onClick={reset}>
+            Limpiar filtros
+          </button>
         </div>
-        <button type="button" className={styles.clearBtn} onClick={reset}>
-          Limpiar filtros
-        </button>
-      </div>
+      )}
 
-      {perfumes.length === 0 ? (
+      {isLoading ? (
+        <div className={styles.grid} aria-label="Cargando catálogo" aria-busy="true">
+          {Array.from({ length: PAGE_SIZE }).map((_, i) => (
+            <CardSkeleton key={i} delay={i * 0.07} />
+          ))}
+        </div>
+      ) : isError ? (
+        <div className={styles.errorWrap} role="alert">
+          <AlertCircle size={40} className={styles.errorIcon} />
+          <h3 className={styles.errorTitle}>No pudimos cargar el catálogo</h3>
+          <p className={styles.errorMsg}>
+            Revisá tu conexión a internet o intentalo de nuevo en unos segundos.
+          </p>
+          {onRetry && (
+            <button className={styles.retryBtn} onClick={onRetry}>
+              <RefreshCw size={15} />
+              Reintentar
+            </button>
+          )}
+        </div>
+      ) : perfumes.length === 0 ? (
         <div className={styles.empty}>
           <h3>No encontré perfumes con esos filtros</h3>
           <p>Probá limpiar la búsqueda o cambiar una categoría.</p>
@@ -69,7 +118,6 @@ export function CatalogGrid({ perfumes }: Props) {
         </div>
       )}
 
-      {/* Sentinel — IntersectionObserver triggers here to load more */}
       <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
 
       {hasMore && (
