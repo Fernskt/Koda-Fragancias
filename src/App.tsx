@@ -6,6 +6,7 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { CartDrawer } from './components/features/cart/CartDrawer';
 import { Home } from './pages/Home';
+import { useStoreConfig } from './hooks/useStoreConfig';
 
 const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })));
 const Dashboard = lazy(() =>
@@ -14,10 +15,18 @@ const Dashboard = lazy(() =>
 
 const queryClient = new QueryClient();
 
+const WA_MESSAGE = encodeURIComponent(
+  'Hola Koda Fragancias! No encuentro el perfume que busco. ¿Me podés ayudar?'
+);
+const WA_FALLBACK = '5491156009539';
+
 function FloatingWhatsApp() {
+  const { data: config } = useStoreConfig();
+  const number = config?.whatsapp_number ?? WA_FALLBACK;
+
   return (
     <a
-      href="https://wa.me/5491156009539?text=Hola%20Koda%20Fragancias!%20No%20encuentro%20el%20perfume%20que%20busco.%20%C2%BFMe%20pod%C3%A9s%20ayudar%3F"
+      href={`https://wa.me/${number}?text=${WA_MESSAGE}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escribir por WhatsApp a Koda Fragancias si no encontrás el perfume"

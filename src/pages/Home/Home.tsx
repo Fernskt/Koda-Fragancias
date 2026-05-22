@@ -6,7 +6,7 @@ import { usePerfumes } from '../../hooks/usePerfumes';
 import { useFilters } from '../../hooks/useFilters';
 
 export function Home() {
-  const { data } = usePerfumes();
+  const { data = [] } = usePerfumes();
   const filtered = useFilters(data);
 
   return (
