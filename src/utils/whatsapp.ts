@@ -30,10 +30,10 @@ export function buildCartMessage(items: CartItem[]): string {
 
   const totalLine =
     total > 0
-      ? `\n💰 Total estimado: $${total.toLocaleString('es-AR')}`
+      ? `\n\u{1F4B0} Total estimado: $${total.toLocaleString('es-AR')}`
       : '';
 
-  return `Hola Koda! Quiero hacer el siguiente pedido:\n\n🛒 Mi pedido:\n${lines}${totalLine}\n\n¿Podés confirmarme disponibilidad?`;
+  return `Hola Koda! Quiero hacer el siguiente pedido:\n\n\u{1F6D2} Mi pedido:\n${lines}${totalLine}\n\n¿Podés confirmarme disponibilidad?`;
 }
 
 export function buildGeneralMessage(): string {
