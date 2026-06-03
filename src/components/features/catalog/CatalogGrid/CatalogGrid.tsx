@@ -12,7 +12,7 @@ const WA_EMPTY_MSG = encodeURIComponent(
   'Hola Koda Fragancias! No encontré lo que buscaba en el catálogo. ¿Me podés ayudar con disponibilidad?'
 );
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 8;
 
 function CardSkeleton({ delay }: { delay: number }) {
   return (

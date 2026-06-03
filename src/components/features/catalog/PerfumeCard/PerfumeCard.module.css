@@ -203,56 +203,68 @@
 .actions {
   margin-top: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: 8px;
+}
+
+.addBtn {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, var(--violet), var(--violet2));
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 11px 14px;
+  color: white;
+  font-weight: 800;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast);
+}
+
+.addBtn:hover {
+  box-shadow: 0 10px 28px rgba(139, 92, 246, 0.35);
 }
 
 .waBtn {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
   text-decoration: none;
   background: linear-gradient(135deg, var(--violet), var(--violet2));
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
+  border-radius: 50%;
   color: white;
-  font-weight: 800;
-  font-size: 13px;
   border: none;
-  font-family: inherit;
-  transition: box-shadow var(--transition-fast);
+  transition: box-shadow var(--transition-fast), background var(--transition-fast);
 }
 
 .waBtn:hover {
-  box-shadow: 0 10px 28px rgba(139, 92, 246, 0.3);
+  background: #1ebe5d;
+  box-shadow: 0 8px 22px rgba(37, 211, 102, 0.4);
 }
 
 .outOfStock .waBtn {
-  background: linear-gradient(135deg, #3b2b4f, #5b3b76);
-  border: 1px solid rgba(216, 180, 254, 0.2);
+  background: #1a9147;
+  opacity: 0.8;
 }
 
-.addBtn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  background: rgba(139, 92, 246, 0.15);
-  border: 1px solid rgba(216, 180, 254, 0.28);
+.waBtnWide {
+  flex: 1;
   border-radius: var(--radius-md);
-  padding: 10px 14px;
-  color: var(--lila);
-  font-weight: 700;
+  width: auto;
+  height: auto;
+  padding: 11px 14px;
+  gap: 8px;
+  font-weight: 800;
   font-size: 13px;
   font-family: inherit;
-  cursor: pointer;
-  transition: background var(--transition-fast), border-color var(--transition-fast);
-}
-
-.addBtn:hover {
-  background: rgba(139, 92, 246, 0.25);
-  border-color: rgba(216, 180, 254, 0.48);
 }
 
 @media (max-width: 768px) {
