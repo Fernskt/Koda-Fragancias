@@ -4,19 +4,19 @@ import styles from './AboutSection.module.css';
 
 const values = [
   {
-    icon: '✦',
-    name: 'Autenticidad',
-    text: 'Trabajamos exclusivamente con fragancias originales de marcas reconocidas en la industria árabe y de diseñador.',
+    icon: '◈',
+    name: 'Origen y calidad',
+    text: 'Trabajamos con fragancias originales de marcas reconocidas, elegidas por su presencia y profundidad.',
   },
   {
     icon: '◆',
-    name: 'Precio justo',
-    text: 'Buscamos hacer accesibles perfumes de calidad sin sacrificar la experiencia olfativa.',
+    name: 'Valor inteligente',
+    text: 'Acercamos fragancias originales, intensas y bien elegidas, sin que el precio sea una barrera.',
   },
   {
-    icon: '❋',
-    name: 'Atención personalizada',
-    text: 'Cada consulta es única. Te ayudamos a elegir según tu estilo, ocasión y presupuesto.',
+    icon: '✧',
+    name: 'Asesoramiento personal',
+    text: 'Cada recomendación nace de tu estilo, tu ocasión y la impresión que querés dejar.',
   },
 ];
 
@@ -40,14 +40,25 @@ export function AboutSection() {
       </motion.span>
 
       <motion.h1 className={styles.title} variants={fadeUp} transition={{ duration: 0.35, delay: 0.05 }}>
-        Acerca de Koda Fragancias
+        Sobre Koda Fragancias
       </motion.h1>
 
-      <motion.p className={styles.lead} variants={fadeUp} transition={{ duration: 0.35, delay: 0.1 }}>
-        Koda Fragancias nació de la pasión por los perfumes árabes y la búsqueda de fragancias de
-        alta calidad a precios accesibles. Somos un emprendimiento argentino que selecciona y ofrece
-        lo mejor de la perfumería árabe y de diseñador, con atención personalizada por WhatsApp.
-      </motion.p>
+      <div className={styles['about-copy']}>
+        <p className={styles['about-lead']}>
+          Hay perfumes que acompañan. Otros, dejan marca.
+        </p>
+
+        <p>
+          En Koda seleccionamos fragancias árabes y de diseñador con carácter,
+          calidad y una identidad clara. Aromas pensados para quienes buscan algo
+          más que oler bien: buscan expresar estilo, presencia y personalidad.
+        </p>
+
+        <p>
+          Cada recomendación está pensada para conectar con tu momento, tu ocasión
+          y la impresión que querés dejar.
+        </p>
+      </div>
 
       <motion.div className={styles.values} variants={fadeUp} transition={{ duration: 0.35, delay: 0.15 }}>
         {values.map((v) => (
@@ -90,5 +101,5 @@ export function AboutSection() {
         </a>
       </motion.div>
     </motion.section>
-  );
+ );
 }
