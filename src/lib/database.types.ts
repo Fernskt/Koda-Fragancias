@@ -3,6 +3,35 @@ export type Json = string | number | boolean | null | { [key: string]: Json } | 
 export interface Database {
   public: {
     Tables: {
+      products: {
+        Row: {
+          id: number;
+          fragella_id: string;
+          price: string;
+          stock_status: 'Disponible' | 'Última unidad' | 'Sin stock';
+          stock_qty: number | null;
+          active: boolean;
+          notes_admin: string | null;
+          fragella_cache: Json | null;
+          order_pos: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: number;
+          fragella_id: string;
+          price?: string;
+          stock_status?: 'Disponible' | 'Última unidad' | 'Sin stock';
+          stock_qty?: number | null;
+          active?: boolean;
+          notes_admin?: string | null;
+          fragella_cache?: Json | null;
+          order_pos?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['public']['Tables']['products']['Insert']>;
+      };
       perfumes: {
         Row: {
           id: number;

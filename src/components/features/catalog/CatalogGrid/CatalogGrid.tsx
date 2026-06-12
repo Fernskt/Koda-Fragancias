@@ -4,7 +4,7 @@ import { PerfumeCard } from '../PerfumeCard';
 import { PerfumeModal } from '../PerfumeModal';
 import { useFilterStore } from '../../../../store/filterStore';
 import { useStoreConfig } from '../../../../hooks/useStoreConfig';
-import type { Perfume } from '../../../../types/perfume';
+import type { DisplayProduct } from '../../../../types/perfume';
 import styles from './CatalogGrid.module.css';
 
 const WA_FALLBACK = '5491156009539';
@@ -39,14 +39,14 @@ function CardSkeleton({ delay }: { delay: number }) {
 }
 
 interface Props {
-  perfumes: Perfume[];
+  perfumes: DisplayProduct[];
   isLoading?: boolean;
   isError?: boolean;
   onRetry?: () => void;
 }
 
 export function CatalogGrid({ perfumes, isLoading, isError, onRetry }: Props) {
-  const [selected, setSelected] = useState<Perfume | null>(null);
+  const [selected, setSelected] = useState<DisplayProduct | null>(null);
   const [visible, setVisible] = useState(PAGE_SIZE);
   const reset = useFilterStore((s) => s.reset);
   const sentinelRef = useRef<HTMLDivElement>(null);

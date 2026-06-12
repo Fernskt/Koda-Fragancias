@@ -3,17 +3,17 @@ import { LogOut, Plus, Pencil, Trash2 } from 'lucide-react';
 import { useAuth } from '../../../hooks/useAuth';
 import {
   usePerfumesAdmin,
-  useCreatePerfumeAdmin,
-  useUpdatePerfumeAdmin,
   useSetActivePerfume,
   useDeletePerfumeAdmin,
+  useUpdateProductBusiness,
 } from '../../../hooks/usePerfumesAdmin';
-import { ProductForm } from '../../../components/features/admin/ProductForm';
+import { FragellaSearchPanel, ProductConfigPanel } from '../../../components/features/admin/FragellaSearchPanel';
+import type { BusinessFormData } from '../../../components/features/admin/FragellaSearchPanel';
 import { normalize } from '../../../utils/normalize';
-import type { Perfume } from '../../../types/perfume';
+import type { ProductRecord, PerfumeStatus } from '../../../types/perfume';
 import styles from './Dashboard.module.css';
 
-function StatusBadge({ status }: { status: Perfume['status'] }) {
+function StatusBadge({ status }: { status: PerfumeStatus }) {
   const cls =
     status === 'Disponible' ? styles.ok
     : status === 'Última unidad' ? styles.warn
@@ -21,56 +21,127 @@ function StatusBadge({ status }: { status: Perfume['status'] }) {
   return <span className={`${styles.badge} ${cls}`}>{status}</span>;
 }
 
+function EditOverlay({
+  product,
+  onClose,
+}: {
+  product: ProductRecord;
+  onClose: () => void;
+}) {
+  const updateMutation = useUpdateProductBusiness();
+
+  const handleSave = async (formData: BusinessFormData) => {
+    await updateMutation.mutateAsync({
+      id: product.id,
+      data: {
+        price: formData.price,
+        stock_status: formData.stock_status,
+        stock_qty: formData.stock_qty ? parseInt(formData.stock_qty, 10) : null,
+        notes_admin: formData.notes_admin || null,
+        active: formData.active,
+      },
+    });
+    onClose();
+  };
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(0,0,0,0.72)',
+        zIndex: 1000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 24,
+      }}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div
+        style={{
+          background: 'var(--card2)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-md)',
+          width: '100%',
+          maxWidth: 480,
+          maxHeight: '90dvh',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: 'var(--shadow-card)',
+        }}
+      >
+        <div
+          style={{
+            padding: '18px 20px',
+            borderBottom: '1px solid var(--border)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>
+            Editar producto
+          </span>
+          <button
+            onClick={onClose}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--muted)',
+              cursor: 'pointer',
+              fontSize: 20,
+              lineHeight: 1,
+            }}
+            aria-label="Cerrar"
+          >
+            ×
+          </button>
+        </div>
+        <ProductConfigPanel
+          fragrance={null}
+          product={product}
+          isSaving={updateMutation.isPending}
+          onSave={handleSave}
+        />
+      </div>
+    </div>
+  );
+}
+
 export function Dashboard() {
   const { logout } = useAuth();
-  const { data: perfumes = [], isLoading } = usePerfumesAdmin();
-  const createMutation = useCreatePerfumeAdmin();
-  const updateMutation = useUpdatePerfumeAdmin();
+  const { data: products = [], isLoading } = usePerfumesAdmin();
   const toggleActiveMutation = useSetActivePerfume();
   const deleteMutation = useDeletePerfumeAdmin();
 
   const [search, setSearch] = useState('');
-  const [formOpen, setFormOpen] = useState(false);
-  const [editing, setEditing] = useState<Perfume | undefined>(undefined);
+  const [searchPanelOpen, setSearchPanelOpen] = useState(false);
+  const [editing, setEditing] = useState<ProductRecord | undefined>(undefined);
 
-  const filtered = perfumes.filter((p) => {
+  const filtered = products.filter((p) => {
     const q = normalize(search);
-    return !q || normalize(`${p.name} ${p.brand}`).includes(q);
+    const name = p.fragella_cache?.Name ?? p.fragella_id;
+    const brand = p.fragella_cache?.Brand ?? '';
+    return !q || normalize(`${name} ${brand}`).includes(q);
   });
 
   const stats = {
-    total: perfumes.length,
-    active: perfumes.filter((p) => (p as Perfume & { active?: boolean }).active !== false).length,
-    disponible: perfumes.filter((p) => p.status === 'Disponible').length,
-    sinStock: perfumes.filter((p) => p.status === 'Sin stock').length,
+    total: products.length,
+    active: products.filter((p) => p.active).length,
+    disponible: products.filter((p) => p.stock_status === 'Disponible').length,
+    sinStock: products.filter((p) => p.stock_status === 'Sin stock').length,
   };
 
-  const handleSave = async (data: Omit<Perfume, 'id'>, id?: number) => {
-    if (id !== undefined) {
-      await updateMutation.mutateAsync({ id, data });
-    } else {
-      await createMutation.mutateAsync(data);
-    }
-  };
-
-  const handleDelete = (p: Perfume) => {
-    if (!window.confirm(`¿Desactivar "${p.name}"? Podrás reactivarlo después.`)) return;
+  const handleDelete = (p: ProductRecord) => {
+    const name = p.fragella_cache?.Name ?? p.fragella_id;
+    if (!window.confirm(`¿Desactivar "${name}"? Podrás reactivarlo después.`)) return;
     deleteMutation.mutate(p.id);
   };
 
-  const handleToggleActive = (p: Perfume & { active?: boolean }) => {
-    const next = p.active === false;
-    toggleActiveMutation.mutate({ id: p.id, active: next });
-  };
-
-  const openCreate = () => {
-    setEditing(undefined);
-    setFormOpen(true);
-  };
-
-  const openEdit = (p: Perfume) => {
-    setEditing(p);
-    setFormOpen(true);
+  const handleToggleActive = (p: ProductRecord) => {
+    toggleActiveMutation.mutate({ id: p.id, active: !p.active });
   };
 
   return (
@@ -118,7 +189,7 @@ export function Dashboard() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button className={styles.btnNew} onClick={openCreate}>
+          <button className={styles.btnNew} onClick={() => setSearchPanelOpen(true)}>
             <Plus size={16} />
             Nuevo perfume
           </button>
@@ -136,7 +207,6 @@ export function Dashboard() {
                 <tr>
                   <th style={{ width: 60 }}></th>
                   <th>Nombre</th>
-                  <th>Tipo</th>
                   <th>Género</th>
                   <th>Estado</th>
                   <th>Precio</th>
@@ -146,40 +216,44 @@ export function Dashboard() {
               </thead>
               <tbody>
                 {filtered.map((p) => {
-                  const perfumeWithActive = p as Perfume & { active?: boolean };
-                  const isActive = perfumeWithActive.active !== false;
+                  const name = p.fragella_cache?.Name ?? p.fragella_id;
+                  const brand = p.fragella_cache?.Brand ?? '—';
+                  const image =
+                    p.fragella_cache?.['Image URL Transparent'] ??
+                    p.fragella_cache?.['Image URL'];
+                  const gender = p.fragella_cache?.Gender ?? '—';
+
                   return (
-                    <tr key={p.id} className={isActive ? undefined : styles.inactive}>
+                    <tr key={p.id} className={p.active ? undefined : styles.inactive}>
                       <td>
-                        {p.image ? (
-                          <img className={styles.thumb} src={p.image} alt={p.name} loading="lazy" />
+                        {image ? (
+                          <img className={styles.thumb} src={image} alt={name} loading="lazy" />
                         ) : (
                           <div className={styles.thumbPlaceholder}>🌸</div>
                         )}
                       </td>
                       <td>
-                        <div className={styles.productName}>{p.name}</div>
-                        <div className={styles.productBrand}>{p.brand}</div>
+                        <div className={styles.productName}>{name}</div>
+                        <div className={styles.productBrand}>{brand}</div>
                       </td>
-                      <td style={{ color: 'var(--muted)', fontSize: 13 }}>{p.type}</td>
-                      <td style={{ color: 'var(--muted)', fontSize: 13 }}>{p.gender}</td>
-                      <td><StatusBadge status={p.status} /></td>
+                      <td style={{ color: 'var(--muted)', fontSize: 13 }}>{gender}</td>
+                      <td><StatusBadge status={p.stock_status} /></td>
                       <td style={{ fontWeight: 600 }}>{p.price}</td>
                       <td>
                         <button
-                          className={`${styles.toggleBtn} ${isActive ? styles.active : styles.inactive}`}
-                          onClick={() => handleToggleActive(perfumeWithActive)}
-                          title={isActive ? 'Click para desactivar' : 'Click para activar'}
+                          className={`${styles.toggleBtn} ${p.active ? styles.active : styles.inactive}`}
+                          onClick={() => handleToggleActive(p)}
+                          title={p.active ? 'Click para desactivar' : 'Click para activar'}
                         >
-                          {isActive ? 'Activo' : 'Inactivo'}
+                          {p.active ? 'Activo' : 'Inactivo'}
                         </button>
                       </td>
                       <td>
                         <div className={styles.actions}>
                           <button
                             className={styles.iconBtn}
-                            onClick={() => openEdit(p)}
-                            title="Editar"
+                            onClick={() => setEditing(p)}
+                            title="Editar precio y stock"
                           >
                             <Pencil size={15} />
                           </button>
@@ -201,12 +275,12 @@ export function Dashboard() {
         )}
       </main>
 
-      {formOpen && (
-        <ProductForm
-          perfume={editing}
-          onSave={handleSave}
-          onClose={() => setFormOpen(false)}
-        />
+      {searchPanelOpen && (
+        <FragellaSearchPanel onClose={() => setSearchPanelOpen(false)} />
+      )}
+
+      {editing && (
+        <EditOverlay product={editing} onClose={() => setEditing(undefined)} />
       )}
     </div>
   );

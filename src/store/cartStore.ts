@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { CartItem, Perfume } from '../types/perfume';
+import type { CartItem, DisplayProduct } from '../types/perfume';
 
 interface CartStore {
   items: CartItem[];
   isOpen: boolean;
-  addItem: (perfume: Perfume) => void;
+  addItem: (perfume: DisplayProduct) => void;
   removeItem: (id: number) => void;
   updateQuantity: (id: number, qty: number) => void;
   clearCart: () => void;

@@ -1,9 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { perfumeService } from '../services/perfumeService';
-import type { Perfume } from '../types/perfume';
+import { productService } from '../services/productService';
+import type { FragellaFragrance, ProductRecord, PerfumeStatus } from '../types/perfume';
 
-export const ADMIN_QUERY_KEY = ['perfumes', 'admin'];
-const PUBLIC_QUERY_KEY = ['perfumes'];
+export const ADMIN_QUERY_KEY = ['products', 'admin'];
+const PUBLIC_QUERY_KEY = ['products'];
 
 const invalidateBoth = (qc: ReturnType<typeof useQueryClient>) => {
   qc.invalidateQueries({ queryKey: ADMIN_QUERY_KEY });
@@ -13,23 +13,41 @@ const invalidateBoth = (qc: ReturnType<typeof useQueryClient>) => {
 export const usePerfumesAdmin = () =>
   useQuery({
     queryKey: ADMIN_QUERY_KEY,
-    queryFn: perfumeService.getAllAdmin,
+    queryFn: productService.getAllAdmin,
     staleTime: 0,
   });
 
-export const useCreatePerfumeAdmin = () => {
+export const useAddFromFragella = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (perfume: Omit<Perfume, 'id'>) => perfumeService.create(perfume),
+    mutationFn: ({
+      fragellaId,
+      fragrance,
+      businessData,
+    }: {
+      fragellaId: string;
+      fragrance: FragellaFragrance;
+      businessData: {
+        price: string;
+        stock_status: PerfumeStatus;
+        stock_qty?: number;
+        notes_admin?: string;
+      };
+    }) => productService.addFromFragella(fragellaId, fragrance, businessData),
     onSuccess: () => invalidateBoth(qc),
   });
 };
 
-export const useUpdatePerfumeAdmin = () => {
+export const useUpdateProductBusiness = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: Partial<Omit<Perfume, 'id'>> }) =>
-      perfumeService.update(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: number;
+      data: Partial<Pick<ProductRecord, 'price' | 'stock_status' | 'stock_qty' | 'active' | 'notes_admin' | 'order_pos'>>;
+    }) => productService.updateBusiness(id, data),
     onSuccess: () => invalidateBoth(qc),
   });
 };
@@ -38,7 +56,7 @@ export const useSetActivePerfume = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ id, active }: { id: number; active: boolean }) =>
-      perfumeService.setActive(id, active),
+      productService.setActive(id, active),
     onSuccess: () => invalidateBoth(qc),
   });
 };
@@ -46,7 +64,7 @@ export const useSetActivePerfume = () => {
 export const useDeletePerfumeAdmin = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: number) => perfumeService.delete(id),
+    mutationFn: (id: number) => productService.delete(id),
     onSuccess: () => invalidateBoth(qc),
   });
 };

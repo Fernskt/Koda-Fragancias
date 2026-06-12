@@ -1,6 +1,6 @@
 import { motion, type Variants } from 'framer-motion';
 import { TipsCarousel } from '../../tips/TipsCarousel';
-import { usePerfumes } from '../../../../hooks/usePerfumes';
+import { useCatalogProducts } from '../../../../hooks/useCatalogProducts';
 import { useStoreConfig } from '../../../../hooks/useStoreConfig';
 import styles from './Hero.module.css';
 import Logo from '../../../../assets/koda-logo.png';
@@ -20,10 +20,10 @@ function formatDate(iso: string): string {
 }
 
 export function Hero() {
-  const { data: perfumes } = usePerfumes();
+  const { data: products } = useCatalogProducts();
   const { data: config } = useStoreConfig();
 
-  const count = perfumes?.length ?? '—';
+  const count = products?.length ?? '—';
   const updatedAt = config?.catalog_updated_at ? formatDate(config.catalog_updated_at) : '—';
 
   return (

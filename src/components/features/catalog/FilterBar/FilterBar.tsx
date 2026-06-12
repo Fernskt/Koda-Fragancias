@@ -4,7 +4,7 @@ import { Input } from '../../../ui/Input';
 import { Chip } from '../../../ui/Chip';
 import { useFilterStore } from '../../../../store/filterStore';
 import { useDebounce } from '../../../../hooks/useDebounce';
-import type { Perfume } from '../../../../types/perfume';
+import type { DisplayProduct } from '../../../../types/perfume';
 import styles from './FilterBar.module.css';
 
 const unique = (arr: string[]) => [...new Set(arr)].sort((a, b) => a.localeCompare(b, 'es'));
@@ -96,7 +96,7 @@ function Dropdown({ label, current, options, value, onChange }: DropdownProps) {
 }
 
 interface FilterBarProps {
-  perfumes: Perfume[];
+  perfumes: DisplayProduct[];
 }
 
 export function FilterBar({ perfumes }: FilterBarProps) {

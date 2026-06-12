@@ -4,7 +4,7 @@ import { Chip } from '../../../ui/Chip';
 import { useCart } from '../../../../hooks/useCart';
 import { buildProductMessage, buildWhatsAppUrl } from '../../../../utils/whatsapp';
 import { formatPrice } from '../../../../utils/formatPrice';
-import type { Perfume } from '../../../../types/perfume';
+import type { DisplayProduct } from '../../../../types/perfume';
 import styles from './PerfumeCard.module.css';
 
 function WhatsAppIcon() {
@@ -16,12 +16,12 @@ function WhatsAppIcon() {
 }
 
 interface Props {
-  perfume: Perfume;
-  onImageClick: (perfume: Perfume) => void;
+  perfume: DisplayProduct;
+  onImageClick: (perfume: DisplayProduct) => void;
   index: number;
 }
 
-function StatusPill({ status }: { status: Perfume['status'] }) {
+function StatusPill({ status }: { status: DisplayProduct['status'] }) {
   const cls =
     status === 'Disponible'
       ? styles.ok
@@ -98,11 +98,11 @@ export function PerfumeCard({ perfume, onImageClick, index }: Props) {
           ))}
         </div>
 
-        <p className={styles.notes}>
-          <strong>Notas:</strong> {perfume.notes}
-        </p>
-
-        {/* <div className={styles.avail}>{perfume.status}</div> */}
+        {perfume.notes && (
+          <p className={styles.notes}>
+            <strong>Notas:</strong> {perfume.notes}
+          </p>
+        )}
 
         <div className={styles.actions}>
           {!isOut && (

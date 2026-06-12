@@ -1,19 +1,19 @@
 import { useState } from 'react';
-import { MessageCircle, ShoppingBag, ExternalLink } from 'lucide-react';
+import { MessageCircle, ShoppingBag } from 'lucide-react';
 import { Modal } from '../../../ui/Modal';
 import { Chip } from '../../../ui/Chip';
 import { useCart } from '../../../../hooks/useCart';
 import { buildProductMessage, buildWhatsAppUrl } from '../../../../utils/whatsapp';
 import { formatPrice } from '../../../../utils/formatPrice';
-import type { Perfume } from '../../../../types/perfume';
+import type { DisplayProduct } from '../../../../types/perfume';
 import styles from './PerfumeModal.module.css';
 
 interface Props {
-  perfume: Perfume | null;
+  perfume: DisplayProduct | null;
   onClose: () => void;
 }
 
-function statusTagClass(status: Perfume['status']): string {
+function statusTagClass(status: DisplayProduct['status']): string {
   if (status === 'Disponible') return styles.ok;
   if (status === 'Última unidad') return styles.warn;
   if (status === 'Sin stock') return styles.out;
@@ -27,7 +27,7 @@ export function PerfumeModal({ perfume, onClose }: Props) {
   if (!perfume) return null;
 
   const isOut = perfume.status === 'Sin stock';
-  const meta = [perfume.brand, perfume.gender, perfume.type].filter(Boolean).join(' · ');
+  const meta = [perfume.brand, perfume.gender, perfume.oilType].filter(Boolean).join(' · ');
 
   const handleAdd = () => {
     addItem(perfume);
@@ -75,36 +75,21 @@ export function PerfumeModal({ perfume, onClose }: Props) {
         </div>
       </div>
 
-      <div className={styles.section}>
-        <span className={styles.label}>Uso recomendado</span>
-        <div className={styles.chips}>
-          {perfume.use.map((u) => (
-            <Chip key={u} variant="use">{u}</Chip>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.section}>
-        <span className={styles.label}>Notas</span>
-        <p className={styles.notesText}>{perfume.notes}</p>
-      </div>
-
-      {perfume.fragranticaUrl && (
+      {perfume.use.length > 0 && (
         <div className={styles.section}>
-          <span className={styles.label}>Referencia</span>
-          <a
-            className={styles.fragLink}
-            href={perfume.fragranticaUrl}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`Ver ${perfume.fragranticaName ?? perfume.name} en Fragrantica`}
-          >
-            <ExternalLink size={13} style={{ marginRight: 4 }} />
-            {perfume.fragranticaName ? `Fragrantica: ${perfume.fragranticaName}` : 'Ver en Fragrantica'}
-          </a>
-          {perfume.verification && (
-            <p className={styles.verif}>{perfume.verification}</p>
-          )}
+          <span className={styles.label}>Uso recomendado</span>
+          <div className={styles.chips}>
+            {perfume.use.map((u) => (
+              <Chip key={u} variant="use">{u}</Chip>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {perfume.notes && (
+        <div className={styles.section}>
+          <span className={styles.label}>Notas</span>
+          <p className={styles.notesText}>{perfume.notes}</p>
         </div>
       )}
 

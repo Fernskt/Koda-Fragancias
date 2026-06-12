@@ -1,4 +1,4 @@
-import type { CartItem, Perfume } from '../types/perfume';
+import type { CartItem, DisplayProduct } from '../types/perfume';
 
 const DEFAULT_NUMBER = '5491156009539';
 
@@ -6,20 +6,23 @@ export function buildWhatsAppUrl(message: string, number = DEFAULT_NUMBER): stri
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
 
-export function buildProductMessage(perfume: Perfume): string {
+export function buildProductMessage(perfume: DisplayProduct): string {
   if (perfume.status === 'Sin stock') {
     return `Hola Koda! Quería consultar cuándo vuelve a entrar ${perfume.name} (${perfume.brand}).`;
   }
   return `Hola Koda! Quería consultar por ${perfume.name} (${perfume.brand}). Vi que figura: ${perfume.status}.`;
 }
 
-export function buildOutOfStockMessage(perfume: Perfume): string {
+export function buildOutOfStockMessage(perfume: DisplayProduct): string {
   return `Hola Koda! Quería consultar cuándo vuelve a entrar ${perfume.name} (${perfume.brand}).`;
 }
 
 export function buildCartMessage(items: CartItem[]): string {
   const lines = items
-    .map((item) => `• ${item.perfume.name} (${item.perfume.brand}) x${item.quantity} - ${item.perfume.price}`)
+    .map(
+      (item) =>
+        `• ${item.perfume.name} (${item.perfume.brand}) x${item.quantity} - ${item.perfume.price}`
+    )
     .join('\n');
 
   const total = items.reduce((acc, item) => {

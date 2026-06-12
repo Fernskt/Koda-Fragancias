@@ -1,24 +1,31 @@
+import { useMemo } from 'react';
 import { Hero } from '../../components/features/hero/Hero';
 import { FilterBar } from '../../components/features/catalog/FilterBar';
 import { CatalogGrid } from '../../components/features/catalog/CatalogGrid';
 import { PageWrapper } from '../../components/layout/PageWrapper';
-import { usePerfumes } from '../../hooks/usePerfumes';
+import { useCatalogProducts } from '../../hooks/useCatalogProducts';
 import { useFilters } from '../../hooks/useFilters';
+import { toCatalogDisplay } from '../../utils/catalogHelpers';
 
 export function Home() {
-  const { data = [], isLoading, isError, refetch } = usePerfumes();
-  const filtered = useFilters(data);
+  const { data: catalogProducts, isLoading, error } = useCatalogProducts();
+
+  const displayProducts = useMemo(
+    () => catalogProducts.map(toCatalogDisplay),
+    [catalogProducts]
+  );
+
+  const filtered = useFilters(displayProducts);
 
   return (
     <PageWrapper>
       <Hero />
-      <FilterBar perfumes={data} />
+      <FilterBar perfumes={displayProducts} />
       <main>
         <CatalogGrid
           perfumes={filtered}
           isLoading={isLoading}
-          isError={isError}
-          onRetry={refetch}
+          isError={!!error}
         />
       </main>
     </PageWrapper>
