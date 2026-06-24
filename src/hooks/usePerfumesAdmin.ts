@@ -11,6 +11,13 @@ const invalidateBoth = (qc: ReturnType<typeof useQueryClient>) => {
   qc.invalidateQueries({ queryKey: PUBLIC_QUERY_KEY });
 };
 
+const touchCatalogDate = (qc: ReturnType<typeof useQueryClient>) => {
+  storeConfigService
+    .touchCatalogUpdatedAt()
+    .then(() => qc.invalidateQueries({ queryKey: ['store_config'] }))
+    .catch((err) => console.error('No se pudo actualizar la fecha del catálogo', err));
+};
+
 export const usePerfumesAdmin = () =>
   useQuery({
     queryKey: ADMIN_QUERY_KEY,
@@ -24,10 +31,7 @@ export const useCreatePerfumeAdmin = () => {
     mutationFn: (perfume: Omit<Perfume, 'id'>) => perfumeService.create(perfume),
     onSuccess: () => {
       invalidateBoth(qc);
-      storeConfigService
-        .touchCatalogUpdatedAt()
-        .then(() => qc.invalidateQueries({ queryKey: ['store_config'] }))
-        .catch((err) => console.error('No se pudo actualizar la fecha del catálogo', err));
+      touchCatalogDate(qc);
     },
   });
 };
@@ -37,7 +41,12 @@ export const useUpdatePerfumeAdmin = () => {
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<Omit<Perfume, 'id'>> }) =>
       perfumeService.update(id, data),
-    onSuccess: () => invalidateBoth(qc),
+    onSuccess: (_result, { data }) => {
+      invalidateBoth(qc);
+      if (data.price !== undefined || data.status !== undefined) {
+        touchCatalogDate(qc);
+      }
+    },
   });
 };
 
