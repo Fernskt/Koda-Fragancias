@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { perfumeService } from '../services/perfumeService';
+import { storeConfigService } from '../services/storeConfigService';
 import type { Perfume } from '../types/perfume';
 
 export const ADMIN_QUERY_KEY = ['perfumes', 'admin'];
@@ -21,7 +22,13 @@ export const useCreatePerfumeAdmin = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (perfume: Omit<Perfume, 'id'>) => perfumeService.create(perfume),
-    onSuccess: () => invalidateBoth(qc),
+    onSuccess: () => {
+      invalidateBoth(qc);
+      storeConfigService
+        .touchCatalogUpdatedAt()
+        .then(() => qc.invalidateQueries({ queryKey: ['store_config'] }))
+        .catch((err) => console.error('No se pudo actualizar la fecha del catálogo', err));
+    },
   });
 };
 
