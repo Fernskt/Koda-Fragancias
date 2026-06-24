@@ -13,4 +13,20 @@ export const storeConfigService = {
     if (error) throw error;
     return data;
   },
+
+  async touchCatalogUpdatedAt(): Promise<void> {
+    const { data: config, error: fetchError } = await supabase
+      .from('store_config')
+      .select('id')
+      .single();
+    if (fetchError) throw fetchError;
+
+    const today = new Date().toISOString().slice(0, 10);
+    const { error } = await supabase
+      .from('store_config')
+      .update({ catalog_updated_at: today })
+      .eq('id', config.id);
+
+    if (error) throw error;
+  },
 };
