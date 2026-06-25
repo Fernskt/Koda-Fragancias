@@ -13,6 +13,7 @@ export function adaptPerfumeFromDB(row: PerfumeRow): Perfume {
     family: row.family,
     use: row.use_cases,          // <-- mapeo clave
     notes: row.notes,
+    perfume_img: row.perfume_img ?? undefined,
     price: row.price,
     status: row.status,
     image: row.image ?? undefined,
@@ -35,6 +36,7 @@ export function adaptPerfumeToDB(
     family: perfume.family,
     use_cases: perfume.use,      // <-- mapeo inverso
     notes: perfume.notes,
+    perfume_img: perfume.perfume_img ?? null,
     price: perfume.price,
     status: perfume.status,
     image: perfume.image ?? null,

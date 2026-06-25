@@ -13,6 +13,7 @@ export interface Database {
           family: string[];
           use_cases: string[];
           notes: string;
+          perfume_img: string | null;
           price: string;
           status: 'Disponible' | 'Última unidad' | 'Sin stock';
           image: string | null;

@@ -11,6 +11,7 @@ export interface Perfume {
   family: string[];
   use: string[];
   notes: string;
+  perfume_img?: string;
   price: string;
   status: PerfumeStatus;
   image?: string;

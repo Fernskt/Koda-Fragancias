@@ -150,8 +150,8 @@ export function Dashboard() {
                   return (
                     <tr key={p.id} className={isActive ? undefined : styles.inactive}>
                       <td>
-                        {p.image ? (
-                          <img className={styles.thumb} src={p.image} alt={p.name} loading="lazy" />
+                        {p.perfume_img ? (
+                          <img className={styles.thumb} src={p.perfume_img} alt={p.name} loading="lazy" />
                         ) : (
                           <div className={styles.thumbPlaceholder}>🌸</div>
                         )}
