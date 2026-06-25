@@ -20,6 +20,7 @@ export function adaptPerfumeFromDB(row: PerfumeRow): Perfume {
     fragranticaName: row.fragrantica_name ?? undefined,
     verification: row.verification ?? undefined,
     starter: row.starter,
+    active: row.active,
   };
 }
 

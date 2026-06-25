@@ -53,7 +53,7 @@ function toForm(p: Perfume): FormData {
   };
 }
 
-function fromForm(f: FormData): Omit<Perfume, 'id'> {
+function fromForm(f: FormData, active: boolean = true): Omit<Perfume, 'id'> {
   const split = (s: string) =>
     s.split(',').map((v) => v.trim()).filter(Boolean);
   return {
@@ -70,6 +70,7 @@ function fromForm(f: FormData): Omit<Perfume, 'id'> {
     fragranticaUrl: f.fragranticaUrl.trim() || undefined,
     fragranticaName: f.fragranticaName.trim() || undefined,
     starter: f.starter,
+    active,
   };
 }
 
@@ -101,7 +102,7 @@ export function ProductForm({ perfume, onSave, onClose }: ProductFormProps) {
     setError('');
     setLoading(true);
     try {
-      await onSave(fromForm(form), perfume?.id);
+      await onSave(fromForm(form, perfume?.active), perfume?.id);
       onClose();
     } catch {
       setError('Ocurrió un error al guardar. Intentá de nuevo.');
