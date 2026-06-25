@@ -2,13 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  max-height: min(34vh, 300px);
+  max-height: min(75vh, 600px);
   margin-bottom: 14px;
 }
 
 .img {
   max-width: 100%;
-  max-height: min(34vh, 300px);
+  max-height: min(75vh, 600px);
   object-fit: contain;
   filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.5));
   border-radius: 16px;

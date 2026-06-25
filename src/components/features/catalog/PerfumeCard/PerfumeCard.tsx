@@ -56,9 +56,9 @@ export function PerfumeCard({ perfume, onImageClick, index }: Props) {
           aria-label={`Ver detalles de ${perfume.name}`}
           onClick={() => onImageClick(perfume)}
         >
-          {perfume.image ? (
+          {perfume.perfume_img ? (
             <img
-              src={perfume.image}
+              src={perfume.perfume_img}
               alt={perfume.name}
               loading="lazy"
               className={styles.img}
