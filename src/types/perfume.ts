@@ -18,6 +18,7 @@ export interface Perfume {
   fragranticaName?: string;
   verification?: string;
   starter: boolean;
+  active: boolean;
 }
 
 export interface CartItem {

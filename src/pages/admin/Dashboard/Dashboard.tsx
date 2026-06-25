@@ -40,7 +40,7 @@ export function Dashboard() {
 
   const stats = {
     total: perfumes.length,
-    active: perfumes.filter((p) => (p as Perfume & { active?: boolean }).active !== false).length,
+    active: perfumes.filter((p) => p.active !== false).length,
     disponible: perfumes.filter((p) => p.status === 'Disponible').length,
     sinStock: perfumes.filter((p) => p.status === 'Sin stock').length,
   };
@@ -58,7 +58,7 @@ export function Dashboard() {
     deleteMutation.mutate(p.id);
   };
 
-  const handleToggleActive = (p: Perfume & { active?: boolean }) => {
+  const handleToggleActive = (p: Perfume) => {
     const next = p.active === false;
     toggleActiveMutation.mutate({ id: p.id, active: next });
   };
@@ -146,8 +146,7 @@ export function Dashboard() {
               </thead>
               <tbody>
                 {filtered.map((p) => {
-                  const perfumeWithActive = p as Perfume & { active?: boolean };
-                  const isActive = perfumeWithActive.active !== false;
+                  const isActive = p.active !== false;
                   return (
                     <tr key={p.id} className={isActive ? undefined : styles.inactive}>
                       <td>
@@ -168,7 +167,7 @@ export function Dashboard() {
                       <td>
                         <button
                           className={`${styles.toggleBtn} ${isActive ? styles.active : styles.inactive}`}
-                          onClick={() => handleToggleActive(perfumeWithActive)}
+                          onClick={() => handleToggleActive(p)}
                           title={isActive ? 'Click para desactivar' : 'Click para activar'}
                         >
                           {isActive ? 'Activo' : 'Inactivo'}
