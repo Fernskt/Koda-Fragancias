@@ -72,10 +72,10 @@ export const perfumeService = {
   },
 
   async delete(id: number): Promise<void> {
-    // Soft delete — no borra el registro
+    
     const { error } = await supabase
       .from('perfumes')
-      .update({ active: false })
+      .delete()
       .eq('id', id);
 
     if (error) throw error;
