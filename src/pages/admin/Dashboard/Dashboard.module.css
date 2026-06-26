@@ -76,6 +76,13 @@
   flex-wrap: wrap;
 }
 
+.toolbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
 .searchInput {
   background: var(--card);
   border: 1px solid var(--border);
@@ -111,6 +118,75 @@
 
 .btnNew:hover {
   opacity: 0.88;
+}
+
+/* ── Filters ── */
+.btnClear {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px 0;
+}
+
+.btnClear:hover {
+  color: var(--error);
+}
+
+/* ── Pagination ── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.pageInfo {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.pageControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pageCurrent {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pageBtn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.pageBtn:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--violet);
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* ── Stats ── */
@@ -184,6 +260,34 @@
 
 .table tr.inactive td {
   opacity: 0.45;
+}
+
+.thSelect {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  appearance: auto;
+}
+
+.thSelect:hover,
+.thSelect:focus {
+  color: var(--text);
+}
+
+.thSelect option {
+  color: var(--text);
+  background: var(--card2);
+  text-transform: none;
+  font-weight: 400;
 }
 
 /* ── Cell content ── */

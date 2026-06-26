@@ -14,6 +14,7 @@ type FormData = {
   family: string;
   use: string;
   image: string;
+  perfumeImg: string;
   fragranticaUrl: string;
   fragranticaName: string;
   starter: boolean;
@@ -30,6 +31,7 @@ const EMPTY: FormData = {
   family: '',
   use: '',
   image: '',
+  perfumeImg: '',
   fragranticaUrl: '',
   fragranticaName: '',
   starter: false,
@@ -47,6 +49,7 @@ function toForm(p: Perfume): FormData {
     family: p.family.join(', '),
     use: p.use.join(', '),
     image: p.image ?? '',
+    perfumeImg: p.perfume_img ?? '',
     fragranticaUrl: p.fragranticaUrl ?? '',
     fragranticaName: p.fragranticaName ?? '',
     starter: p.starter,
@@ -67,6 +70,7 @@ function fromForm(f: FormData, active: boolean = true): Omit<Perfume, 'id'> {
     family: split(f.family),
     use: split(f.use),
     image: f.image.trim() || undefined,
+    perfume_img: f.perfumeImg.trim() || undefined,
     fragranticaUrl: f.fragranticaUrl.trim() || undefined,
     fragranticaName: f.fragranticaName.trim() || undefined,
     starter: f.starter,
@@ -197,9 +201,15 @@ export function ProductForm({ perfume, onSave, onClose }: ProductFormProps) {
             </div>
           </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="pf-image">URL de imagen</label>
-            <input id="pf-image" className={styles.input} type="url" placeholder="https://..." value={form.image} onChange={(e) => set('image', e.target.value)} />
+          <div className={styles.row}>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="pf-image">URL de imagen</label>
+              <input id="pf-image" className={styles.input} type="url" placeholder="https://..." value={form.image} onChange={(e) => set('image', e.target.value)} />
+            </div>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="pf-perfume-img">URL de imagen del frasco</label>
+              <input id="pf-perfume-img" className={styles.input} type="url" placeholder="https://..." value={form.perfumeImg} onChange={(e) => set('perfumeImg', e.target.value)} />
+            </div>
           </div>
 
           <div className={styles.row}>

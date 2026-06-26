@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { LogOut, Plus, Pencil, Trash2 } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { LogOut, Plus, Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '../../../hooks/useAuth';
 import {
   usePerfumesAdmin,
@@ -12,6 +12,14 @@ import { ProductForm } from '../../../components/features/admin/ProductForm';
 import { normalize } from '../../../utils/normalize';
 import type { Perfume } from '../../../types/perfume';
 import styles from './Dashboard.module.css';
+
+const PAGE_SIZE = 50;
+const TYPE_OPTIONS = ['Todos', 'Arabe', 'Diseñador'];
+const GENDER_OPTIONS = ['Todos', 'Hombre', 'Mujer', 'Unisex', 'Femenino'];
+const STATUS_OPTIONS = ['Todos', 'Disponible', 'Última unidad', 'Sin stock'];
+const VISIBLE_OPTIONS = ['Todos', 'Activos', 'Inactivos'];
+
+const unique = (arr: string[]) => [...new Set(arr)].sort((a, b) => a.localeCompare(b, 'es'));
 
 function StatusBadge({ status }: { status: Perfume['status'] }) {
   const cls =
@@ -30,13 +38,78 @@ export function Dashboard() {
   const deleteMutation = useDeletePerfumeAdmin();
 
   const [search, setSearch] = useState('');
+  const [brandFilter, setBrandFilter] = useState('Todas');
+  const [typeFilter, setTypeFilter] = useState('Todos');
+  const [genderFilter, setGenderFilter] = useState('Todos');
+  const [statusFilter, setStatusFilter] = useState('Todos');
+  const [visibleFilter, setVisibleFilter] = useState('Todos');
+  const [page, setPage] = useState(1);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Perfume | undefined>(undefined);
 
+  const brandOptions = useMemo(
+    () => ['Todas', ...unique(perfumes.map((p) => p.brand))],
+    [perfumes]
+  );
+
   const filtered = perfumes.filter((p) => {
     const q = normalize(search);
-    return !q || normalize(`${p.name} ${p.brand}`).includes(q);
+    const matchesSearch = !q || normalize(`${p.name} ${p.brand}`).includes(q);
+    const matchesBrand = brandFilter === 'Todas' || p.brand === brandFilter;
+    const matchesType = typeFilter === 'Todos' || p.type === typeFilter;
+    const matchesGender = genderFilter === 'Todos' || p.gender === genderFilter;
+    const matchesStatus = statusFilter === 'Todos' || p.status === statusFilter;
+    const isActive = p.active !== false;
+    const matchesVisible =
+      visibleFilter === 'Todos' || (visibleFilter === 'Activos' ? isActive : !isActive);
+    return matchesSearch && matchesBrand && matchesType && matchesGender && matchesStatus && matchesVisible;
   });
+
+  const updateSearch = (v: string) => {
+    setSearch(v);
+    setPage(1);
+  };
+  const updateBrandFilter = (v: string) => {
+    setBrandFilter(v);
+    setPage(1);
+  };
+  const updateTypeFilter = (v: string) => {
+    setTypeFilter(v);
+    setPage(1);
+  };
+  const updateGenderFilter = (v: string) => {
+    setGenderFilter(v);
+    setPage(1);
+  };
+  const updateStatusFilter = (v: string) => {
+    setStatusFilter(v);
+    setPage(1);
+  };
+  const updateVisibleFilter = (v: string) => {
+    setVisibleFilter(v);
+    setPage(1);
+  };
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  const hasActiveFilters =
+    search !== '' ||
+    brandFilter !== 'Todas' ||
+    typeFilter !== 'Todos' ||
+    genderFilter !== 'Todos' ||
+    statusFilter !== 'Todos' ||
+    visibleFilter !== 'Todos';
+
+  const clearFilters = () => {
+    setSearch('');
+    setBrandFilter('Todas');
+    setTypeFilter('Todos');
+    setGenderFilter('Todos');
+    setStatusFilter('Todos');
+    setVisibleFilter('Todos');
+  };
 
   const stats = {
     total: perfumes.length,
@@ -111,13 +184,18 @@ export function Dashboard() {
 
         {/* Toolbar */}
         <div className={styles.toolbar}>
-          <input
-            className={styles.searchInput}
-            type="search"
-            placeholder="Buscar por nombre o marca..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <div className={styles.toolbarLeft}>
+            <input
+              className={styles.searchInput}
+              type="search"
+              placeholder="Buscar por nombre o marca..."
+              value={search}
+              onChange={(e) => updateSearch(e.target.value)}
+            />
+            {hasActiveFilters && (
+              <button className={styles.btnClear} onClick={clearFilters}>Limpiar filtros</button>
+            )}
+          </div>
           <button className={styles.btnNew} onClick={openCreate}>
             <Plus size={16} />
             Nuevo perfume
@@ -135,17 +213,52 @@ export function Dashboard() {
               <thead>
                 <tr>
                   <th style={{ width: 60 }}></th>
-                  <th>Nombre</th>
-                  <th>Tipo</th>
-                  <th>Género</th>
-                  <th>Estado</th>
+                  <th>
+                    <select className={styles.thSelect} value={brandFilter} onChange={(e) => updateBrandFilter(e.target.value)} aria-label="Filtrar por marca">
+                      <option value="Todas">Marca</option>
+                      {brandOptions.filter((opt) => opt !== 'Todas').map((opt) => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </th>
+                  <th>
+                    <select className={styles.thSelect} value={typeFilter} onChange={(e) => updateTypeFilter(e.target.value)} aria-label="Filtrar por tipo">
+                      <option value="Todos">Tipo</option>
+                      {TYPE_OPTIONS.filter((opt) => opt !== 'Todos').map((opt) => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </th>
+                  <th>
+                    <select className={styles.thSelect} value={genderFilter} onChange={(e) => updateGenderFilter(e.target.value)} aria-label="Filtrar por género">
+                      <option value="Todos">Género</option>
+                      {GENDER_OPTIONS.filter((opt) => opt !== 'Todos').map((opt) => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </th>
+                  <th>
+                    <select className={styles.thSelect} value={statusFilter} onChange={(e) => updateStatusFilter(e.target.value)} aria-label="Filtrar por estado">
+                      <option value="Todos">Estado</option>
+                      {STATUS_OPTIONS.filter((opt) => opt !== 'Todos').map((opt) => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </th>
                   <th>Precio</th>
-                  <th>Visible</th>
+                  <th>
+                    <select className={styles.thSelect} value={visibleFilter} onChange={(e) => updateVisibleFilter(e.target.value)} aria-label="Filtrar por visibilidad">
+                      <option value="Todos">Visible</option>
+                      {VISIBLE_OPTIONS.filter((opt) => opt !== 'Todos').map((opt) => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </th>
                   <th style={{ width: 90 }}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((p) => {
+                {paged.map((p) => {
                   const isActive = p.active !== false;
                   return (
                     <tr key={p.id} className={isActive ? undefined : styles.inactive}>
@@ -196,6 +309,34 @@ export function Dashboard() {
                 })}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {!isLoading && filtered.length > 0 && (
+          <div className={styles.pagination}>
+            <span className={styles.pageInfo}>
+              Mostrando {(currentPage - 1) * PAGE_SIZE + 1}-{Math.min(currentPage * PAGE_SIZE, filtered.length)} de {filtered.length}
+            </span>
+            <div className={styles.pageControls}>
+              <button
+                className={styles.pageBtn}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                aria-label="Página anterior"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span className={styles.pageCurrent}>Página {currentPage} de {totalPages}</span>
+              <button
+                className={styles.pageBtn}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                aria-label="Página siguiente"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
           </div>
         )}
       </main>
