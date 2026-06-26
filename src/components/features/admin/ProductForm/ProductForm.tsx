@@ -160,7 +160,19 @@ export function ProductForm({ perfume, onSave, onClose }: ProductFormProps) {
           <div className={styles.row}>
             <div className={styles.field}>
               <label className={`${styles.label} ${styles.required}`} htmlFor="pf-price">Precio</label>
-              <input id="pf-price" className={styles.input} placeholder="$65.000" value={form.price} onChange={(e) => set('price', e.target.value)} required />
+              <input id="pf-price" className={styles.input} placeholder="$65.000" value={form.price}
+                onChange={(e) => {
+                  // allow only digits from user input
+                  const digits = e.target.value.replace(/\D/g, '');
+                  if (!digits) {
+                    set('price', '');
+                    return;
+                  }
+                  // format with dot as thousands separator and leading $
+                  const withSep = digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                  set('price', `$${withSep}`);
+                }} required
+              />
             </div>
             <div className={styles.field}>
               <label className={styles.label} htmlFor="pf-status">Estado</label>
