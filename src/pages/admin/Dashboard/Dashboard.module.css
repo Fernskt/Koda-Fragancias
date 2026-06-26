@@ -1,7 +1,8 @@
 .wrap {
-  min-height: 100dvh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* ── Header ── */
@@ -12,9 +13,6 @@
   padding: 18px 28px;
   border-bottom: 1px solid var(--border);
   background: var(--card2);
-  position: sticky;
-  top: 0;
-  z-index: 10;
 }
 
 .headerLeft {
@@ -40,6 +38,32 @@
   color: var(--muted);
 }
 
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btnSite {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.btnSite:hover {
+  border-color: var(--violet);
+  color: var(--violet);
+}
+
 .btnLogout {
   background: transparent;
   border: 1px solid var(--border);
@@ -60,10 +84,13 @@
 /* ── Main ── */
 .main {
   flex: 1;
+  min-height: 0;
   padding: 28px;
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Toolbar ── */
@@ -74,6 +101,7 @@
   gap: 16px;
   margin-bottom: 20px;
   flex-wrap: wrap;
+  flex-shrink: 0;
 }
 
 .toolbarLeft {
@@ -195,6 +223,7 @@
   gap: 12px;
   margin-bottom: 24px;
   flex-wrap: wrap;
+  flex-shrink: 0;
 }
 
 .stat {
@@ -220,7 +249,9 @@
 
 /* ── Table ── */
 .tableWrap {
-  overflow-x: auto;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
 }
@@ -242,6 +273,9 @@
   background: var(--card2);
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .table td {
@@ -419,6 +453,7 @@
 
 /* ── Empty / loading ── */
 .empty {
+  flex: 1;
   text-align: center;
   padding: 64px 24px;
   color: var(--muted);
@@ -428,6 +463,10 @@
 @media (max-width: 768px) {
   .header {
     padding: 14px 16px;
+  }
+
+  .toolbar {
+    padding: 12px 16px;
   }
 
   .main {

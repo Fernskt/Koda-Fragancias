@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { LogOut, Plus, Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { LogOut, Plus, Pencil, Trash2, ChevronLeft, ChevronRight, Globe } from 'lucide-react';
 import { useAuth } from '../../../hooks/useAuth';
 import {
   usePerfumesAdmin,
@@ -155,10 +156,16 @@ export function Dashboard() {
           <span className={styles.divider}>|</span>
           <span className={styles.pageTitle}>Panel Admin</span>
         </div>
-        <button className={styles.btnLogout} onClick={logout}>
-          <LogOut size={14} style={{ marginRight: 6 }} />
-          Salir
-        </button>
+        <div className={styles.headerRight}>
+          <Link className={styles.btnSite} to="/">
+            <Globe size={14} style={{ marginRight: 6 }} />
+            Ir al sitio web
+          </Link>
+          <button className={styles.btnLogout} onClick={logout}>
+            <LogOut size={14} style={{ marginRight: 6 }} />
+            Salir
+          </button>
+        </div>
       </header>
 
       <main className={styles.main}>
@@ -195,11 +202,39 @@ export function Dashboard() {
             {hasActiveFilters && (
               <button className={styles.btnClear} onClick={clearFilters}>Limpiar filtros</button>
             )}
+            <button className={styles.btnNew} onClick={openCreate}>
+              <Plus size={16} />
+              Nuevo perfume
+            </button>
           </div>
-          <button className={styles.btnNew} onClick={openCreate}>
-            <Plus size={16} />
-            Nuevo perfume
-          </button>
+
+          {/* Pagination */}
+          {!isLoading && filtered.length > 0 && (
+            <div className={styles.pagination}>
+              <span className={styles.pageInfo}>
+                Mostrando {(currentPage - 1) * PAGE_SIZE + 1}-{Math.min(currentPage * PAGE_SIZE, filtered.length)} de {filtered.length}
+              </span>
+              <div className={styles.pageControls}>
+                <button
+                  className={styles.pageBtn}
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  aria-label="Página anterior"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <span className={styles.pageCurrent}>Página {currentPage} de {totalPages}</span>
+                <button
+                  className={styles.pageBtn}
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  aria-label="Página siguiente"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Table */}
@@ -309,34 +344,6 @@ export function Dashboard() {
                 })}
               </tbody>
             </table>
-          </div>
-        )}
-
-        {/* Pagination */}
-        {!isLoading && filtered.length > 0 && (
-          <div className={styles.pagination}>
-            <span className={styles.pageInfo}>
-              Mostrando {(currentPage - 1) * PAGE_SIZE + 1}-{Math.min(currentPage * PAGE_SIZE, filtered.length)} de {filtered.length}
-            </span>
-            <div className={styles.pageControls}>
-              <button
-                className={styles.pageBtn}
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                aria-label="Página anterior"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <span className={styles.pageCurrent}>Página {currentPage} de {totalPages}</span>
-              <button
-                className={styles.pageBtn}
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                aria-label="Página siguiente"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
           </div>
         )}
       </main>
