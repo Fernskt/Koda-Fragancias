@@ -31,6 +31,27 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--violet) var(--card2);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--card2);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--violet);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--card2);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--violet2);
 }
 
 @media (prefers-reduced-motion: reduce) {
