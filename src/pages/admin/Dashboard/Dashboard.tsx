@@ -54,7 +54,7 @@ export function Dashboard() {
   };
 
   const handleDelete = (p: Perfume) => {
-    if (!window.confirm(`¿Desactivar "${p.name}"? Podrás reactivarlo después.`)) return;
+    if (!window.confirm(`¿Eliminar "${p.name}"? Esta acción no se puede deshacer.`)) return;
     deleteMutation.mutate(p.id);
   };
 
@@ -185,7 +185,7 @@ export function Dashboard() {
                           <button
                             className={`${styles.iconBtn} ${styles.danger}`}
                             onClick={() => handleDelete(p)}
-                            title="Desactivar"
+                            title="Eliminar"
                           >
                             <Trash2 size={15} />
                           </button>
