@@ -4,6 +4,7 @@ import { usePerfumes } from '../../../../hooks/usePerfumes';
 import { useStoreConfig } from '../../../../hooks/useStoreConfig';
 import styles from './Hero.module.css';
 import Logo from '../../../../assets/koda-logo.png';
+import Portada from '../../../../assets/portada.png';
 
 const stagger: Variants = {
   animate: { transition: { staggerChildren: 0.1 } },
@@ -27,7 +28,10 @@ export function Hero() {
   const updatedAt = config?.catalog_updated_at ? formatDate(config.catalog_updated_at) : '—';
 
   return (
-    <header className={styles.hero}>
+    <header
+      className={styles.hero}
+      style={{ backgroundImage: `url(${Portada})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+    >
       <motion.div className={styles.inner} variants={stagger} initial="initial" animate="animate">
         <div className={styles.intro}>
           <motion.div className={styles.titleRow} variants={fadeUp}>
