@@ -18,6 +18,7 @@ type FormData = {
   fragranticaUrl: string;
   fragranticaName: string;
   starter: boolean;
+  featured: boolean;
 };
 
 const EMPTY: FormData = {
@@ -35,6 +36,7 @@ const EMPTY: FormData = {
   fragranticaUrl: '',
   fragranticaName: '',
   starter: false,
+  featured: false,
 };
 
 function toForm(p: Perfume): FormData {
@@ -53,6 +55,7 @@ function toForm(p: Perfume): FormData {
     fragranticaUrl: p.fragranticaUrl ?? '',
     fragranticaName: p.fragranticaName ?? '',
     starter: p.starter,
+    featured: p.featured,
   };
 }
 
@@ -74,6 +77,7 @@ function fromForm(f: FormData, active: boolean = true): Omit<Perfume, 'id'> {
     fragranticaUrl: f.fragranticaUrl.trim() || undefined,
     fragranticaName: f.fragranticaName.trim() || undefined,
     starter: f.starter,
+    featured: f.featured,
     active,
   };
 }
@@ -233,6 +237,19 @@ export function ProductForm({ perfume, onSave, onClose }: ProductFormProps) {
             />
             <label className={styles.checkLabel} htmlFor="pf-starter">
               Marcar como "Para empezar" (recomendado para principiantes)
+            </label>
+          </div>
+
+          <div className={styles.checkRow}>
+            <input
+              id="pf-featured"
+              className={styles.checkbox}
+              type="checkbox"
+              checked={form.featured}
+              onChange={(e) => set('featured', e.target.checked)}
+            />
+            <label className={styles.checkLabel} htmlFor="pf-featured">
+              Marcar como Destacado
             </label>
           </div>
 

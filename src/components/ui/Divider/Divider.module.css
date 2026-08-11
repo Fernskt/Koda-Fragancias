@@ -1,0 +1,8 @@
+.divider {
+  border: none;
+  height: 1px;
+  width: calc(100% - 36px);
+  max-width: 1184px;
+  margin: 30px auto;
+  background: rgba(216, 180, 254, 0.14);
+}

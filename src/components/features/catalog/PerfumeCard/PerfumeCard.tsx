@@ -35,7 +35,7 @@ export function PerfumeCard({ perfume, onImageClick, index }: Props) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
   const isOut = perfume.status === 'Sin stock';
-  const families = perfume.family.filter((f) => f !== 'Más pedidos').slice(0, 4);
+  const families = perfume.family.filter((f) => f !== 'Más pedidos').slice(0, 3);
 
   const handleAdd = () => {
     addItem(perfume);
@@ -98,9 +98,9 @@ export function PerfumeCard({ perfume, onImageClick, index }: Props) {
           ))}
         </div>
 
-        <p className={styles.notes}>
+       {/*  <p className={styles.notes}>
           <strong>Notas:</strong> {perfume.notes}
-        </p>
+        </p> */}
 
         {/* <div className={styles.avail}>{perfume.status}</div> */}
 

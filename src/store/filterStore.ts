@@ -11,7 +11,7 @@ interface FilterStore extends FilterState {
   reset: () => void;
 }
 
-const defaults: FilterState = {
+export const defaults: FilterState = {
   search: '',
   brand: 'Todas',
   status: 'Todos',
@@ -30,3 +30,14 @@ export const useFilterStore = create<FilterStore>((set) => ({
   setUse: (v) => set({ use: v }),
   reset: () => set(defaults),
 }));
+
+export const useHasActiveFilters = () =>
+  useFilterStore(
+    (s) =>
+      s.search !== defaults.search ||
+      s.brand !== defaults.brand ||
+      s.status !== defaults.status ||
+      s.gender !== defaults.gender ||
+      s.family !== defaults.family ||
+      s.use !== defaults.use
+  );
