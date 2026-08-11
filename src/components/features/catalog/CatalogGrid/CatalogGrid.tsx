@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { AlertCircle, RefreshCw } from 'lucide-react';
+import { AlertCircle, ArrowLeft, RefreshCw } from 'lucide-react';
 import { PerfumeCard } from '../PerfumeCard';
 import { PerfumeModal } from '../PerfumeModal';
-import { useFilterStore } from '../../../../store/filterStore';
+import { useFilterStore, useHasActiveFilters, useActiveFilterSummary } from '../../../../store/filterStore';
 import { useStoreConfig } from '../../../../hooks/useStoreConfig';
 import type { Perfume } from '../../../../types/perfume';
 import styles from './CatalogGrid.module.css';
@@ -49,6 +49,8 @@ export function CatalogGrid({ perfumes, isLoading, isError, onRetry }: Props) {
   const [selected, setSelected] = useState<Perfume | null>(null);
   const [visible, setVisible] = useState(PAGE_SIZE);
   const reset = useFilterStore((s) => s.reset);
+  const hasActiveFilters = useHasActiveFilters();
+  const filterSummary = useActiveFilterSummary();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const { data: config } = useStoreConfig();
   const waNumber = config?.whatsapp_number ?? WA_FALLBACK;
@@ -82,13 +84,30 @@ export function CatalogGrid({ perfumes, isLoading, isError, onRetry }: Props) {
     <section className={styles.section}>
       {!isLoading && !isError && (
         <div className={styles.topline}>
-          <div>
-            <p className={styles.overline}>Resultados</p>
-            <h2 className={styles.heading}>{perfumes.length} perfumes encontrados</h2>
+          <div className={styles.titleRow}>
+            {hasActiveFilters && (
+              <button
+                type="button"
+                className={styles.backBtn}
+                onClick={reset}
+                aria-label="Volver y limpiar filtros"
+              >
+                <ArrowLeft size={18} />
+              </button>
+            )}
+            <div>
+              <p className={styles.overline}>Resultados</p>
+              <h2 className={styles.heading}>
+                {perfumes.length} perfumes encontrados
+                {filterSummary && `: ${filterSummary}`}
+              </h2>
+            </div>
           </div>
-          <button type="button" className={styles.clearBtn} onClick={reset}>
-            Limpiar filtros
-          </button>
+          {hasActiveFilters && (
+            <button type="button" className={styles.clearBtn} onClick={reset}>
+              Limpiar filtros
+            </button>
+          )}
         </div>
       )}
 

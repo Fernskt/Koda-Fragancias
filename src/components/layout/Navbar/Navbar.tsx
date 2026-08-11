@@ -230,7 +230,12 @@ export function Navbar() {
   return (
     <header className={[styles.navbar, scrolled ? styles.scrolled : ''].filter(Boolean).join(' ')}>
       <div className={styles.inner}>
-        <NavLink to="/" className={styles.brand} aria-label="Koda Fragancias - inicio">
+        <NavLink
+          to="/"
+          className={styles.brand}
+          aria-label="Koda Fragancias - inicio"
+          onClick={() => store.reset()}
+        >
           <img src={Logo} alt="Koda Fragancias" className={styles.logo} />
           <span className={styles.brandName}>
             Koda <span>Fragancias</span>
