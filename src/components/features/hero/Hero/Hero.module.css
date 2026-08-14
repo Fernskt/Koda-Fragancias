@@ -107,6 +107,18 @@
   color: #fff;
   line-height: 1.05;
 }
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+}
+
+@media screen and (min-width: 768px) {
+
+.intro {
+  display: block;
+}
+}
 
 @media screen and (max-width: 768px) {
   .stat {
