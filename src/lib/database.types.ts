@@ -21,6 +21,7 @@ export interface Database {
           fragrantica_name: string | null;
           verification: string | null;
           starter: boolean;
+          featured: boolean;
           active: boolean;
           created_at: string;
           updated_at: string;

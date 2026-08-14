@@ -53,18 +53,24 @@
 .nav {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 .navLink {
   display: inline-flex;
   align-items: center;
-  padding: 8px 14px;
+  gap: 4px;
+  padding: 8px 12px;
   border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  font-family: inherit;
   font-size: 14px;
   font-weight: 600;
   color: var(--muted);
   text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
   transition: color var(--transition-fast), background var(--transition-fast);
 }
 
@@ -74,10 +80,109 @@
   background: rgba(139, 92, 246, 0.12);
 }
 
+.navItemActive {
+  color: var(--lila);
+  background: rgba(139, 92, 246, 0.18);
+}
+
+.arrow {
+  color: currentColor;
+  opacity: 0.7;
+  transition: transform var(--transition-fast);
+}
+
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Ítems de filtro en la navbar (hover en desktop) */
+.navFilterWrap {
+  position: relative;
+}
+
+.navPanel {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Pegado al trigger (top: 100%, sin gap real) a propósito: un hueco acá
+     rompe el hover porque esa franja no pertenece al wrapper ni a sus
+     descendientes, y el mouseleave dispara antes de llegar al panel.
+     El "aire" visual se logra con padding-top, que sí es parte del área
+     hovereable. */
+  top: 100%;
+  z-index: 60;
+  min-width: 220px;
+  max-width: 320px;
+  border: 1px solid rgba(216, 180, 254, 0.28);
+  background: rgba(10, 7, 16, 0.98);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: var(--radius-md);
+  padding: 18px 12px 12px;
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.44);
+  max-height: min(52vh, 360px);
+  overflow: auto;
+}
+
+.navChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Buscador con ícono que se expande */
+.searchWrap {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  padding: 8px;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  transition: background var(--transition-fast);
+}
+
+.iconBtn:hover {
+  background: rgba(139, 92, 246, 0.12);
+}
+
+.searchInput {
+  width: 0;
+  opacity: 0;
+  padding: 8px 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  background: rgba(139, 92, 246, 0.12);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  transition: width 0.25s ease, opacity 0.2s ease, padding 0.25s ease, border-color var(--transition-fast);
+}
+
+.searchInput::placeholder {
+  color: var(--muted);
+}
+
+.searchInputOpen {
+  width: 240px;
+  opacity: 1;
+  padding: 8px 14px;
+  border-color: rgba(216, 180, 254, 0.35);
+  margin-right: 4px;
+}
+
 .actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
 .hamburger {
@@ -128,6 +233,59 @@
   background: rgba(139, 92, 246, 0.12);
 }
 
+.mobileSearchWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(216, 180, 254, 0.24);
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  margin-bottom: 6px;
+}
+
+.mobileSearchIcon {
+  color: var(--lila);
+  flex-shrink: 0;
+}
+
+.mobileSearchInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.mobileSearchInput::placeholder {
+  color: var(--muted);
+}
+
+.mobileFilterItem {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.mobileFilterBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: inherit;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.mobileChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 14px 14px;
+}
+
 @media (max-width: 768px) {
   .navbar.scrolled {
     backdrop-filter: none;
@@ -136,8 +294,9 @@
   }
 }
 
-@media (max-width: 640px) {
-  .nav {
+@media (max-width: 900px) {
+  .nav,
+  .searchWrap {
     display: none;
   }
 

@@ -21,7 +21,10 @@ export function adaptPerfumeFromDB(row: PerfumeRow): Perfume {
     fragranticaName: row.fragrantica_name ?? undefined,
     verification: row.verification ?? undefined,
     starter: row.starter,
+    featured: row.featured,
     active: row.active,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
   };
 }
 
@@ -44,6 +47,7 @@ export function adaptPerfumeToDB(
     fragrantica_name: perfume.fragranticaName ?? null,
     verification: perfume.verification ?? null,
     starter: perfume.starter,
+    featured: perfume.featured,
     active: true,
   };
 }

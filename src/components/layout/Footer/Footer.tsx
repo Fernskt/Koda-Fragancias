@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import styles from './Footer.module.css';
 
 export function Footer() {
@@ -9,6 +10,10 @@ export function Footer() {
         <strong>Koda Fragancias</strong> — descubrí tu próxima fragancia.
       </p>
       <div className={styles.links}>
+        <NavLink to="/about" className={styles.link}>
+          Acerca de
+        </NavLink>
+        <span className={styles.dot}>·</span>
         <a
           href="https://www.instagram.com/kodafragancias/"
           target="_blank"

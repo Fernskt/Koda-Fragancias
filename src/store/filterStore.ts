@@ -11,7 +11,7 @@ interface FilterStore extends FilterState {
   reset: () => void;
 }
 
-const defaults: FilterState = {
+export const defaults: FilterState = {
   search: '',
   brand: 'Todas',
   status: 'Todos',
@@ -30,3 +30,27 @@ export const useFilterStore = create<FilterStore>((set) => ({
   setUse: (v) => set({ use: v }),
   reset: () => set(defaults),
 }));
+
+export const useHasActiveFilters = () =>
+  useFilterStore(
+    (s) =>
+      s.search !== defaults.search ||
+      s.brand !== defaults.brand ||
+      s.status !== defaults.status ||
+      s.gender !== defaults.gender ||
+      s.family !== defaults.family ||
+      s.use !== defaults.use
+  );
+
+const getActiveFilterSummary = (s: FilterState): string => {
+  const parts: string[] = [];
+  if (s.search !== defaults.search) parts.push(s.search);
+  if (s.brand !== defaults.brand) parts.push(s.brand);
+  if (s.status !== defaults.status) parts.push(s.status);
+  if (s.gender !== defaults.gender) parts.push(s.gender);
+  if (s.family !== defaults.family) parts.push(s.family);
+  if (s.use !== defaults.use) parts.push(s.use);
+  return parts.join(', ');
+};
+
+export const useActiveFilterSummary = () => useFilterStore(getActiveFilterSummary);

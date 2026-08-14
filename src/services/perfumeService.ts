@@ -50,6 +50,7 @@ export const perfumeService = {
     if (perfume.image !== undefined)         updateData.image          = perfume.image ?? null;
     if (perfume.fragranticaUrl !== undefined) updateData.fragrantica_url = perfume.fragranticaUrl ?? null;
     if (perfume.starter !== undefined)       updateData.starter        = perfume.starter;
+    if (perfume.featured !== undefined)      updateData.featured       = perfume.featured;
 
     const { data, error } = await supabase
       .from('perfumes')

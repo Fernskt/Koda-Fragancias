@@ -1,8 +1,21 @@
 .hero {
   position: relative;
   overflow: hidden;
-  padding: 38px 18px 28px;
+  display: flex;
+  align-items: center;
+  padding: 38px 18px;
+  min-height: 90vh;
+  background-repeat: no-repeat;
   border-bottom: 1px solid rgba(216, 180, 254, 0.14);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 0;
+  pointer-events: none;
 }
 
 .hero::after {
@@ -22,7 +35,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(260px, 440px);
   gap: 24px 32px;
-  align-items: end;
+  align-items: center;
 }
 
 .intro {
