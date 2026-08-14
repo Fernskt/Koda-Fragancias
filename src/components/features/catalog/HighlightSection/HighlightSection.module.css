@@ -60,27 +60,53 @@
   scroll-snap-align: start;
 }
 
-/* Desktop/tablet: mismo ancho de card que CatalogGrid, pero centrado
-   cuando hay menos ítems que columnas (en vez de quedar pegado a la izquierda) */
-@media (min-width: 769px) {
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 18px;
-    overflow: visible;
-    margin: 0;
-    padding: 0;
-  }
-
-  .slide {
-    width: auto;
-    flex: 0 1 calc((100% - 3 * 18px) / 4);
-  }
+/* Desktop/tablet: mismo carrusel de scroll horizontal, con flechas para navegar */
+.carousel {
+  position: relative;
 }
 
-@media (min-width: 769px) and (max-width: 1050px) {
+.navBtn {
+  display: none;
+}
+
+@media (min-width: 769px) {
   .slide {
-    flex-basis: calc((100% - 2 * 18px) / 3);
+    width: 260px;
+  }
+
+  .navBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(139, 92, 246, 0.55);
+    background: rgba(21, 16, 30, 0.9);
+    color: #e9d5ff;
+    cursor: pointer;
+    z-index: 2;
+    transition: background var(--transition-fast), border-color var(--transition-fast), opacity var(--transition-fast);
+  }
+
+  .navBtn:hover:not(:disabled) {
+    background: rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.8);
+  }
+
+  .navBtn:disabled {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .navPrev {
+    left: 2px;
+  }
+
+  .navNext {
+    right: 2px;
   }
 }
