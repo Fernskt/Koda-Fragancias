@@ -107,13 +107,15 @@ export function Product() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
           >
-            <div className={[styles.imageFrame, isOut ? styles.imageFrameOut : ''].join(' ')}>
-              {perfume.featured && (
-                <span className={styles.featuredTag}>
-                  <Sparkles size={13} />
-                  Destacado
-                </span>
-              )}
+            <div
+              className={[
+                styles.imageFrame,
+                isOut ? styles.imageFrameOut : '',
+                perfume.featured ? styles.imageFrameFeatured : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            >
               {displayImage ? (
                 <img src={displayImage} alt={perfume.name} className={styles.image} />
               ) : (
@@ -153,6 +155,12 @@ export function Product() {
                 <Sun size={14} />
                 {perfume.type}
               </span>
+              {perfume.featured && (
+                <span className={styles.metaItem}>
+                  <Sparkles size={14} />
+                  Destacado
+                </span>
+              )}
               {perfume.starter && (
                 <span className={styles.metaItem}>
                   <BadgeCheck size={14} />
