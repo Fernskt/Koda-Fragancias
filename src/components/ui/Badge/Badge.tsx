@@ -7,12 +7,19 @@ interface Props {
   children: ReactNode;
   variant?: Variant;
   className?: string;
+  onClick?: () => void;
 }
 
-export function Badge({ children, variant = 'default', className }: Props) {
-  return (
-    <span className={[styles.badge, styles[variant], className].filter(Boolean).join(' ')}>
-      {children}
-    </span>
-  );
+export function Badge({ children, variant = 'default', className, onClick }: Props) {
+  const classes = [styles.badge, styles[variant], className].filter(Boolean).join(' ');
+
+  if (onClick) {
+    return (
+      <button type="button" className={classes} onClick={onClick}>
+        {children}
+      </button>
+    );
+  }
+
+  return <span className={classes}>{children}</span>;
 }

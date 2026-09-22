@@ -9,6 +9,17 @@
   background: rgba(139, 92, 246, 0.12);
   color: #eadcff;
   white-space: nowrap;
+  font-family: inherit;
+}
+
+button.chip {
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+button.chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(216, 180, 254, 0.4);
 }
 
 .use {

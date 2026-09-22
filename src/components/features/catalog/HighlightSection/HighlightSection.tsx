@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, type LucideIcon } from 'lucide-react';
 import { PerfumeCard } from '../PerfumeCard';
-import { PerfumeModal } from '../PerfumeModal';
 import { Divider } from '../../../ui/Divider';
 import type { Perfume } from '../../../../types/perfume';
 import styles from './HighlightSection.module.css';
@@ -13,7 +12,6 @@ interface Props {
 }
 
 export function HighlightSection({ title, icon: Icon, perfumes }: Props) {
-  const [selected, setSelected] = useState<Perfume | null>(null);
   const rowRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -72,7 +70,7 @@ export function HighlightSection({ title, icon: Icon, perfumes }: Props) {
         <div className={styles.row} role="list" ref={rowRef}>
           {perfumes.map((p, i) => (
             <div key={p.id} className={styles.slide} role="listitem">
-              <PerfumeCard perfume={p} onImageClick={setSelected} index={i} />
+              <PerfumeCard perfume={p} index={i} />
             </div>
           ))}
         </div>
@@ -88,7 +86,6 @@ export function HighlightSection({ title, icon: Icon, perfumes }: Props) {
         </button>
       </div>
 
-      <PerfumeModal perfume={selected} onClose={() => setSelected(null)} />
       <Divider />
     </section>
   );

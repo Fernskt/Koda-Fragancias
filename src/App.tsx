@@ -10,6 +10,9 @@ import { Home } from './pages/Home';
 import { useStoreConfig } from './hooks/useStoreConfig';
 
 const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })));
+const Product = lazy(() =>
+  import('./pages/Product').then((m) => ({ default: m.Product }))
+);
 const Dashboard = lazy(() =>
   import('./pages/admin/Dashboard').then((m) => ({ default: m.Dashboard }))
 );
@@ -103,6 +106,16 @@ function AppRoutes() {
             <PublicLayout>
               <Suspense fallback={null}>
                 <About />
+              </Suspense>
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/perfume/:id"
+          element={
+            <PublicLayout>
+              <Suspense fallback={null}>
+                <Product />
               </Suspense>
             </PublicLayout>
           }
