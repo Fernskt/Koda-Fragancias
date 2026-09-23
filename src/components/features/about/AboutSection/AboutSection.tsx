@@ -100,5 +100,5 @@ export function AboutSection() {
         </a>
       </motion.div>
     </motion.section>
-  );
+ );
 }
