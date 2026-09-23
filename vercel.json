@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/perfume/:id", "destination": "/api/perfume/:id" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
