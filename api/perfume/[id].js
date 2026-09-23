@@ -24,6 +24,14 @@ export default async function handler(req, res) {
   const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
   let perfume = null;
+  const debug = {
+    hasSupabaseUrl: Boolean(supabaseUrl),
+    hasSupabaseAnonKey: Boolean(supabaseAnonKey),
+    id,
+    supabaseStatus: null,
+    supabaseError: null,
+    rowsFound: null,
+  };
 
   try {
     if (supabaseUrl && supabaseAnonKey && id) {
@@ -34,13 +42,24 @@ export default async function handler(req, res) {
           Authorization: `Bearer ${supabaseAnonKey}`,
         },
       });
+      debug.supabaseStatus = resp.status;
       if (resp.ok) {
         const rows = await resp.json();
         perfume = rows[0] || null;
+        debug.rowsFound = rows.length;
+      } else {
+        debug.supabaseError = await resp.text();
       }
     }
   } catch (err) {
+    debug.supabaseError = String(err);
     console.error('Error fetching perfume for OG tags:', err);
+  }
+
+  if (req.query.debug) {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json({ ...debug, perfume });
+    return;
   }
 
   let html;
