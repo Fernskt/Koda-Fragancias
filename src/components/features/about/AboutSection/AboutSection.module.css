@@ -96,7 +96,7 @@
 .brands {
   display: flex;
   flex-wrap: wrap;
-  gap: 32px 40px;
+  gap: 32px;
 }
 
 .brandItem {
