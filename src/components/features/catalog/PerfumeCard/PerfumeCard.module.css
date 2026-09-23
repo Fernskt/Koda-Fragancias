@@ -50,7 +50,7 @@
   height: 100%;
   border: none;
   background: transparent;
-  cursor: zoom-in;
+  cursor: pointer;
   border-radius: 18px;
   padding: 0;
 }

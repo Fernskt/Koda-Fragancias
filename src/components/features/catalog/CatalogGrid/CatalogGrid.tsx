@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AlertCircle, ArrowLeft, RefreshCw } from 'lucide-react';
 import { PerfumeCard } from '../PerfumeCard';
-import { PerfumeModal } from '../PerfumeModal';
 import { useFilterStore, useHasActiveFilters, useActiveFilterSummary } from '../../../../store/filterStore';
 import { useStoreConfig } from '../../../../hooks/useStoreConfig';
 import type { Perfume } from '../../../../types/perfume';
@@ -46,7 +45,6 @@ interface Props {
 }
 
 export function CatalogGrid({ perfumes, isLoading, isError, onRetry }: Props) {
-  const [selected, setSelected] = useState<Perfume | null>(null);
   const [visible, setVisible] = useState(PAGE_SIZE);
   const reset = useFilterStore((s) => s.reset);
   const hasActiveFilters = useHasActiveFilters();
@@ -156,7 +154,7 @@ export function CatalogGrid({ perfumes, isLoading, isError, onRetry }: Props) {
         <div className={styles.grid} role="list">
           {shown.map((p, i) => (
             <div key={p.id} role="listitem">
-              <PerfumeCard perfume={p} onImageClick={setSelected} index={i} />
+              <PerfumeCard perfume={p} index={i} />
             </div>
           ))}
         </div>
@@ -167,8 +165,6 @@ export function CatalogGrid({ perfumes, isLoading, isError, onRetry }: Props) {
       {hasMore && (
         <p className={styles.loadingHint}>Cargando más perfumes…</p>
       )}
-
-      <PerfumeModal perfume={selected} onClose={() => setSelected(null)} />
     </section>
   );
 }

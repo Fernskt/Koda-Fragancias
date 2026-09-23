@@ -1,1 +1,0 @@
-export { PerfumeModal } from './PerfumeModal';

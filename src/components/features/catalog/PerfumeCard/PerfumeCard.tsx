@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
 import { Chip } from '../../../ui/Chip';
 import { useCart } from '../../../../hooks/useCart';
@@ -17,7 +18,6 @@ function WhatsAppIcon() {
 
 interface Props {
   perfume: Perfume;
-  onImageClick: (perfume: Perfume) => void;
   index: number;
 }
 
@@ -31,8 +31,9 @@ function StatusPill({ status }: { status: Perfume['status'] }) {
   return <div className={[styles.statusPill, cls].join(' ')}>{status}</div>;
 }
 
-export function PerfumeCard({ perfume, onImageClick, index }: Props) {
+export function PerfumeCard({ perfume, index }: Props) {
   const { addItem } = useCart();
+  const navigate = useNavigate();
   const [added, setAdded] = useState(false);
   const isOut = perfume.status === 'Sin stock';
   const families = perfume.family.filter((f) => f !== 'Más pedidos').slice(0, 3);
@@ -54,7 +55,7 @@ export function PerfumeCard({ perfume, onImageClick, index }: Props) {
           type="button"
           className={styles.zoomBtn}
           aria-label={`Ver detalles de ${perfume.name}`}
-          onClick={() => onImageClick(perfume)}
+          onClick={() => navigate(`/perfume/${perfume.id}`)}
         >
           {perfume.perfume_img ? (
             <img
