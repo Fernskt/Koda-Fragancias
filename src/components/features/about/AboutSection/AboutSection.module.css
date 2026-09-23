@@ -178,7 +178,7 @@
   }
    .brands {
     justify-content: center;
-    gap: 10px;
+    gap: 32px 10px;
   }
   .brandsSection {
     text-align: center;
