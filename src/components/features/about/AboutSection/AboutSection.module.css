@@ -99,6 +99,10 @@
   gap: 32px;
 }
 
+@media (max-width: 720px) {
+ 
+}
+
 .brandItem {
   display: flex;
   flex-direction: column;
@@ -171,5 +175,12 @@
 @media (max-width: 720px) {
   .values {
     grid-template-columns: 1fr;
+  }
+   .brands {
+    justify-content: center;
+    gap: 10px;
+  }
+  .brandsSection {
+    text-align: center;
   }
 }
