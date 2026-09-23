@@ -361,6 +361,13 @@ export function Navbar() {
                 placeholder="Buscar perfume, marca, nota o estilo..."
                 value={localSearch}
                 onChange={(e) => setLocalSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.currentTarget.blur();
+                    setMenuOpen(false);
+                    if (location.pathname !== '/') navigate('/');
+                  }
+                }}
               />
             </div>
             {filters.map((f) => (
