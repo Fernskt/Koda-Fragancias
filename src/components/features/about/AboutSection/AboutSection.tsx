@@ -1,22 +1,24 @@
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
+import { HiOutlineShieldCheck, HiOutlineTag, HiOutlineChatBubbleLeftRight } from 'react-icons/hi2';
+import { getBrandLogo } from '../../../../assets/logos';
 import styles from './AboutSection.module.css';
 
 const values = [
   {
-    icon: '◈',
-    name: 'Origen y calidad',
-    text: 'Trabajamos con fragancias originales de marcas reconocidas, elegidas por su presencia y profundidad.',
+    icon: HiOutlineShieldCheck,
+    name: 'Autenticidad',
+    text: 'Trabajamos exclusivamente con fragancias originales de marcas reconocidas en la industria árabe y de diseñador.',
   },
   {
-    icon: '◆',
-    name: 'Valor inteligente',
-    text: 'Acercamos fragancias originales, intensas y bien elegidas, sin que el precio sea una barrera.',
+    icon: HiOutlineTag,
+    name: 'Precio justo',
+    text: 'Buscamos hacer accesibles perfumes de calidad sin sacrificar la experiencia olfativa.',
   },
   {
-    icon: '✧',
-    name: 'Asesoramiento personal',
-    text: 'Cada recomendación nace de tu estilo, tu ocasión y la impresión que querés dejar.',
+    icon: HiOutlineChatBubbleLeftRight,
+    name: 'Atención personalizada',
+    text: 'Cada consulta es única. Te ayudamos a elegir según tu estilo, ocasión y presupuesto.',
   },
 ];
 
@@ -40,30 +42,21 @@ export function AboutSection() {
       </motion.span>
 
       <motion.h1 className={styles.title} variants={fadeUp} transition={{ duration: 0.35, delay: 0.05 }}>
-        Sobre Koda Fragancias
+        Acerca de <span>Koda Fragancias</span>
       </motion.h1>
 
-      <div className={styles['about-copy']}>
-        <p className={styles['about-lead']}>
-          Hay perfumes que acompañan. Otros, dejan marca.
-        </p>
-
-        <p>
-          En Koda seleccionamos fragancias árabes y de diseñador con carácter,
-          calidad y una identidad clara. Aromas pensados para quienes buscan algo
-          más que oler bien: buscan expresar estilo, presencia y personalidad.
-        </p>
-
-        <p>
-          Cada recomendación está pensada para conectar con tu momento, tu ocasión
-          y la impresión que querés dejar.
-        </p>
-      </div>
+      <motion.p className={styles.lead} variants={fadeUp} transition={{ duration: 0.35, delay: 0.1 }}>
+        Soy Eze, la persona detrás de Koda Fragancias.
+        En nuestra web vas a encontrar perfumes árabes y de diseñador, con información para ayudarte a elegir. <br /> Y si entre tantas notas y nombres no sabés por dónde empezar, podés escribirme: contame cuáles te gustan, para qué ocasión lo buscás y qué presupuesto tenés. Desde ahí vemos las opciones juntos.<br /><br />
+        Gracias por acompañar este emprendimiento y confiar en Koda para elegir algo tan personal como tu perfume.
+      </motion.p>
 
       <motion.div className={styles.values} variants={fadeUp} transition={{ duration: 0.35, delay: 0.15 }}>
         {values.map((v) => (
           <div className={styles.value} key={v.name}>
-            <div className={styles.valueIcon}>{v.icon}</div>
+            <div className={styles.valueIcon}>
+              <v.icon />
+            </div>
             <p className={styles.valueName}>{v.name}</p>
             <p className={styles.valueText}>{v.text}</p>
           </div>
@@ -73,9 +66,15 @@ export function AboutSection() {
       <motion.div className={styles.brandsSection} variants={fadeUp} transition={{ duration: 0.35, delay: 0.2 }}>
         <p className={styles.brandsTitle}>Marcas disponibles</p>
         <div className={styles.brands}>
-          {brands.map((b) => (
-            <span key={b} className={styles.brandChip}>{b}</span>
-          ))}
+          {brands.map((b) => {
+            const logo = getBrandLogo(b);
+            return (
+              <div key={b} className={styles.brandItem}>
+                {logo && <img src={logo} alt={b} className={styles.brandLogo} />}
+                <span className={styles.brandName}>{b}</span>
+              </div>
+            );
+          })}
         </div>
       </motion.div>
 
