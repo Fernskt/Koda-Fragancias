@@ -17,7 +17,7 @@ function absoluteUrl(url, siteUrl) {
   return `${siteUrl}${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   const { id } = req.query;
   const siteUrl = (process.env.VITE_SITE_URL || `https://${req.headers.host}`).replace(/\/$/, '');
   const supabaseUrl = process.env.VITE_SUPABASE_URL;
@@ -123,4 +123,4 @@ module.exports = async (req, res) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=600, stale-while-revalidate=3600');
   res.status(200).send(html);
-};
+}
