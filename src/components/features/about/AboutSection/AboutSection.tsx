@@ -37,9 +37,9 @@ export function AboutSection() {
       animate="animate"
       transition={{ staggerChildren: 0.1 }}
     >
-      <motion.span className={styles.badge} variants={fadeUp} transition={{ duration: 0.35 }}>
+      {/* <motion.span className={styles.badge} variants={fadeUp} transition={{ duration: 0.35 }}>
         Perfumería Árabe
-      </motion.span>
+      </motion.span> */}
 
       <motion.h1 className={styles.title} variants={fadeUp} transition={{ duration: 0.35, delay: 0.05 }}>
         Acerca de <span>Koda Fragancias</span>
@@ -71,7 +71,7 @@ export function AboutSection() {
             return (
               <div key={b} className={styles.brandItem}>
                 {logo && <img src={logo} alt={b} className={styles.brandLogo} />}
-                <span className={styles.brandName}>{b}</span>
+                {/* <span className={styles.brandName}>{b}</span> */}
               </div>
             );
           })}
