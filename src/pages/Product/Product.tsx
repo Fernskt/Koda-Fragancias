@@ -10,6 +10,7 @@ import {
   Sun,
   Users,
   BadgeCheck,
+  Share2,
 } from 'lucide-react';
 import { PageWrapper } from '../../components/layout/PageWrapper';
 import { Chip } from '../../components/ui/Chip';
@@ -42,6 +43,7 @@ export function Product() {
   const { addItem } = useCart();
   const { setBrand, setStatus, setGender, setFamily, setUse } = useFilterStore();
   const [added, setAdded] = useState(false);
+  const [shared, setShared] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -92,13 +94,50 @@ export function Product() {
     setTimeout(() => setAdded(false), 1400);
   };
 
+  const handleShare = async () => {
+    const shareUrl = `${window.location.origin}/perfume/${perfume.id}`;
+    const shareData = {
+      title: `${perfume.name} — ${perfume.brand} | Koda Fragancias`,
+      text: `Mirá ${perfume.name} de ${perfume.brand} en Koda Fragancias`,
+      url: shareUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // El usuario canceló el share o el navegador lo rechazó; no hacemos nada.
+      }
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setShared(true);
+      setTimeout(() => setShared(false), 1800);
+    } catch {
+      // Sin Web Share API ni clipboard disponible, no hay fallback posible.
+    }
+  };
+
   return (
     <PageWrapper>
       <main className={styles.page}>
-        <button type="button" className={styles.backLink} onClick={() => navigate(-1)}>
-          <ArrowLeft size={16} />
-          Volver al catálogo
-        </button>
+        <div className={styles.topRow}>
+          <button type="button" className={styles.backLink} onClick={() => navigate(-1)}>
+            <ArrowLeft size={16} />
+            Volver al catálogo
+          </button>
+          <button
+            type="button"
+            className={styles.shareBtn}
+            onClick={handleShare}
+            aria-label={`Compartir ${perfume.name}`}
+          >
+            <Share2 size={16} />
+            <span>{shared ? '¡Enlace copiado!' : 'Compartir'}</span>
+          </button>
+        </div>
 
         <div className={styles.layout}>
           <motion.div
